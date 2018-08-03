@@ -4,19 +4,33 @@
     <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 
-<form action="{{ path("fos_user_security_check") }}" method="post">
+<form class="form-signin text-center" action="{{ path("fos_user_security_check") }}" method="post">
+    <img class="mb-4" src="{{ asset('assets/img/bootstrap-solid.svg') }}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Inicia sesión</h1>
     {% if csrf_token %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
     {% endif %}
 
-    <label for="username">{{ 'security.login.username'|trans }}</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" autocomplete="username" />
 
-    <label for="password">{{ 'security.login.password'|trans }}</label>
-    <input type="password" id="password" name="_password" required="required" autocomplete="current-password" />
+    {#<label for="username">{{ 'security.login.username'|trans }}</label>#}
+    <label for="username" class="sr-only">Nombre de usuario o email</label>
+    {#<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" autocomplete="username" />#}
+    <input type="text" id="username" class="form-control" placeholder="Email address" name="_username" value="{{ last_username }}" required="required" autocomplete="username" autofocus>
 
-    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-    <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+    {#<label for="password">{{ 'security.login.password'|trans }}</label>#}
+    <label for="password" class="sr-only">Contraseña</label>
+    {#<input type="password" id="password" name="_password" required="required" autocomplete="current-password" />#}
+    <input type="password" id="password" class="form-control" placeholder="Password" name="_password" required="required" autocomplete="current-password" />
 
-    <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+    {#<input type="checkbox" id="remember_me" name="_remember_me" value="on" />#}
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> Remember me
+        </label>
+    </div>
+    {#<label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>#}
+
+    {#<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" class="btn btn-lg btn-primary btn-block">#}
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
 </form>
