@@ -17,9 +17,9 @@ class UserController extends Controller
 
     function __construct()
     {
-        $this->request = Request::createFromGlobals();
+        /*$this->request = Request::createFromGlobals();
         $this->validator = $this->get('validator');
-        $this->em = $this->getDoctrine();
+        $this->em = $this->getDoctrine();*/
     }
 
     /**
@@ -63,10 +63,10 @@ class UserController extends Controller
         //Comprobar si se loguea con correo o con nick
         if(Filter::isEmail($login)){
             //obtener usuario por email
-            $user = $this->em->getRepository(User::class)->findOneByEmail($login);
+            //$user = $this->em->getRepository(User::class)->findOneByEmail($login);
         }else{
             //obtener usuario por nick
-            $user = $this->em->getRepository(User::class)->findOneByNick($login);
+            //$user = $this->em->getRepository(User::class)->findOneByNick($login);
         }
         //Comprobar que la clave sea la correcta
 
