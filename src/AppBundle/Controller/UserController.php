@@ -51,25 +51,5 @@ class UserController extends Controller
 
     }
 
-    /**
-     * @Route("/login")
-     */
-    public function login(){
-        $user = new User();
 
-        $login = $this->request->query->get('nick');
-        $password = $this->request->query->get('password');
-
-        //Comprobar si se loguea con correo o con nick
-        if(Filter::isEmail($login)){
-            //obtener usuario por email
-            //$user = $this->em->getRepository(User::class)->findOneByEmail($login);
-        }else{
-            //obtener usuario por nick
-            //$user = $this->em->getRepository(User::class)->findOneByNick($login);
-        }
-        //Comprobar que la clave sea la correcta
-
-
-    }
 }
