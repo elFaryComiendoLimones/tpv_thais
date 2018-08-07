@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use AppBundle\Utils\Filter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 class UserController extends Controller
@@ -27,8 +28,8 @@ class UserController extends Controller
      */
     public function indexAction()
     {
-        // replace this example code with whatever you need
-        return $this->render('login/login.html.twig');
+        $user = $this->getUser();
+        return $this->render('dashboard.html.twig', ['user' => $user]);
     }
 
     /**
