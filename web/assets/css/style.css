@@ -138,7 +138,14 @@ span {
 #sidebar.active ul li a {
     padding: 20px 10px;
     text-align: center;
-    font-size: 0.85em;
+    font-size: 0.75em;
+}
+
+#sidebar.active ul li span {
+    display: block;
+    min-width: 62px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #sidebar.active ul li a i {
@@ -150,6 +157,10 @@ span {
 
 #sidebar.active ul ul a {
     padding: 10px !important;
+}
+
+#sidebar.active ul.collapse li a{
+    font-size: 0.75em !important;
 }
 
 #sidebar.active .dropdown-toggle::after {
@@ -282,7 +293,7 @@ a.article:hover {
         padding: 20px 10px;
     }
     #sidebar ul li a span {
-        font-size: 0.85em;
+        font-size: 0.75em;
     }
     #sidebar ul li a i {
         margin-right: 0;
