@@ -6,7 +6,7 @@
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3 class="text-center">Bienvenido/a {{ user.username }}</h3>
+                <h3 class="text-center">Bienvenido/a {{ app.user.username }}</h3>
                 <strong>Th</strong>
             </div>
 
@@ -38,7 +38,7 @@
                     </a>
                 </li>
                 <li title="Empleados">
-                    <a href="#">
+                    <a href="{{ path('fos_user_registration_register') }}">
                         <i class="fas fa-briefcase"></i>
                         <span>Empleados</span>
                     </a>

@@ -11,16 +11,13 @@ use AppBundle\Utils\Filter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
-class UserController extends Controller
+class EmployeeController extends Controller
 {
 
-    private $request, $validator, $em;
 
     function __construct()
     {
-        /*$this->request = Request::createFromGlobals();
-        $this->validator = $this->get('validator');
-        $this->em = $this->getDoctrine();*/
+
     }
 
     /**
@@ -28,28 +25,24 @@ class UserController extends Controller
      */
     public function indexAction()
     {
-        $user = $this->getUser();
-        return $this->render('dashboard.html.twig', ['user' => $user]);
+        return $this->render('dashboard.html.twig');
     }
 
     /**
-     * @Route("/register-admin")
+     * @Route("/register-employee", name="register-employee")
      */
     //Provisional , solo se ha insertado un admin pasando parámetros a mano
     public function registerAdmin()
     {
 
-        $user = new User();
+        $userManager = $this->get('fos_user.user_manager');
+
+        $user = $userManager->createUser();
         $user->read();
-        //codificar password
-        $user->setPassword($user->getPassword());
 
-        $this->em->getManager()->persist($user);
-        $this->em->getManager->flush();
-
+        //$userManager->updateUser($user);
 
         return $this->render('pruebas/prueba.html.twig', ['user' => $user]);
-
     }
 
 
