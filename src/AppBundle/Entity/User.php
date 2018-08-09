@@ -24,23 +24,6 @@ class User extends BaseUser
      */
     protected $id;
 
-
-    /**
-     * @return mixed
-     */
-    public function getTickets()
-    {
-        return $this->tickets;
-    }
-
-    /**
-     * @param mixed $tickets
-     */
-    public function setTickets($tickets)
-    {
-        $this->tickets = $tickets;
-    }
-
     /**
      * @ORM\OneToMany(targetEntity="Ticket", mappedBy="id_user")
      */

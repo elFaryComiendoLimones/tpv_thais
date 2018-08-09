@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table(name="ticket")
  */
-class ticket
+class Ticket
 {
 
     use Common;

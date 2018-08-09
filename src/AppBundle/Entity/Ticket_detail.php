@@ -16,7 +16,7 @@ use AppBundle\Traits\Common;
  * @ORM\Entity
  * @ORM\Table(name="ticket_detail")
  */
-class ticket_detail
+class Ticket_detail
 {
 
     use Common;
