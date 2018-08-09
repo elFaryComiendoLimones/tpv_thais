@@ -61,6 +61,24 @@ class Provider
     private $address;
 
     /**
+     * @ORM\Column(type="integer", length=2)
+     */
+    private $active;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="id_provider")
+     */
+    private $products;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->products = new ArrayCollection();
+    }
+
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -173,14 +191,35 @@ class Provider
     }
 
     /**
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="id_provider")
+     * @return mixed
      */
-    private $products;
-
-    public function __construct()
+    public function getActive()
     {
-        parent::__construct();
-        $this->products = new ArrayCollection();
+        return $this->active;
+    }
+
+    /**
+     * @param mixed $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
     }
 
 }

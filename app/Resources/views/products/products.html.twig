@@ -1,34 +1,36 @@
 {% extends 'sidebar.html.twig' %}
 
 {% block content %}
+<h1>Lista de productos</h1>
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">#</th>
             <th scope="col">Imagen</th>
             <th scope="col">Nombre</th>
-            <th scope="col">Email</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Proveedor</th>
+            <th scope="col">Precio</th>
             <th scope="col" colspan="2">Acciones</th>
         </tr>
         </thead>
         <tbody>
-        {% set cont = 1 %}
-        {% for user in users %}
+        {% for p in products %}
             <tr>
-                <th scope="row">{{ cont }}</th>
-                <td>imagen</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
+                <th scope="row">imagen</th>
+                <td>{{ p.name }}</td>
+                <td>{{ p.description }}</td>
+                <td>{{ p.id_provider.name }}</td>
+                <td>{{ p.price }}</td>
                 <td colspan="2">
                     <button type="button" class="btn btn-warning">Editar</button>
                     <button type="button" class="btn btn-danger">Eliminar</button>
                 </td>
             </tr>
-            {% set cont = cont + 1 %}
         {% endfor %}
         </tbody>
     </table>
 
-    <a class="btn btn-dark" href="">Añadir empleado</a>
+    <a class="btn btn-dark" href="">Añadir Producto</a>
 
+    {#{{ dump(products) }}#}
 {% endblock %}

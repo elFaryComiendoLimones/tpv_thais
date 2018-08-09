@@ -48,6 +48,17 @@ class Ticket
     private $date_sale;
 
     /**
+     * @ORM\OneToMany(targetEntity="Ticket_detail", mappedBy="id_ticket")
+     */
+    private $ticket_details;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->ticket_details = new ArrayCollection();
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -127,16 +138,5 @@ class Ticket
         $this->ticket_details = $ticket_details;
     }
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Ticket_detail", mappedBy="id_ticket")
-     */
-    private $ticket_details;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->ticket_details = new ArrayCollection();
-    }
 
 }

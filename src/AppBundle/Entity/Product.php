@@ -55,6 +55,11 @@ class Product
     private $description;
 
     /**
+     * @ORM\Column(type="integer", length=2)
+     */
+    private $active;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -89,7 +94,7 @@ class Product
     /**
      * @return mixed
      */
-    public function getIdProvider()
+    public function getid_provider()
     {
         return $this->id_provider;
     }
@@ -97,7 +102,7 @@ class Product
     /**
      * @param mixed $id_provider
      */
-    public function setIdProvider($id_provider)
+    public function setid_provider($id_provider)
     {
         $this->id_provider = $id_provider;
     }
@@ -149,6 +154,24 @@ class Product
     {
         $this->description = $description;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param mixed $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+
 
 
 }

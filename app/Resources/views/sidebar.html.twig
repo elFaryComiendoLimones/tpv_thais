@@ -11,45 +11,45 @@
             </div>
 
             <ul class="list-unstyled components">
-                <li class="active" title="Dashboard">
+                <li class="{{ app.request.get('_route') == 'homepage' ? 'active' }}" title="Dashboard">
                     <a href="{{ path('homepage') }}">
                         <i class="fas fa-th-large"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li title="Stock">
+                <li title="Stock" class="{{ app.request.get('_route') == 'products' or app.request.get('_route') == 'treatments' ? 'active' }}">
                     <a href="#stockSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-box"></i>
                         <span>Stock</span>
                     </a>
                     <ul class="collapse list-unstyled" id="stockSubmenu">
                         <li>
-                            <a href="#">Productos</a>
+                            <a href="{{ path('products') }}">Productos</a>
                         </li>
                         <li>
                             <a href="#">Tratamientos</a>
                         </li>
                     </ul>
                 </li>
-                <li title="Proveedores">
+                <li title="Proveedores" class="{{ app.request.get('_route') == 'providers' ? 'active' }}">
                     <a href="#">
                         <i class="fas fa-clipboard-check"></i>
                         <span>Proveedores</span>
                     </a>
                 </li>
-                <li title="Empleados">
+                <li title="Empleados" class="{{ app.request.get('_route') == 'employees' ? 'active' }}">
                     <a href="{{ path('employees') }}">
                         <i class="fas fa-briefcase"></i>
                         <span>Empleados</span>
                     </a>
                 </li>
-                <li title="Clientes">
+                <li title="Clientes" class="{{ app.request.get('_route') == 'clients' ? 'active' }}">
                     <a href="#">
                         <i class="fas fa-users"></i>
                         <span>Clientes</span>
                     </a>
                 </li>
-                <li title="Ventas">
+                <li title="Ventas" class="{{ app.request.get('_route') == 'tickets' ? 'active' }}">
                     <a href="#">
                         <i class="fas fa-chart-line"></i>
                         <span>Ventas</span>

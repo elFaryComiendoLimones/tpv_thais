@@ -96,6 +96,17 @@ class Client
     private $active;
 
     /**
+     * @ORM\OneToMany(targetEntity="Ticket", mappedBy="id_client")
+     */
+    private $tickets;
+
+
+    public function __construct()
+    {
+        $this->tickets = new ArrayCollection();
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -336,14 +347,6 @@ class Client
         $this->tickets = $tickets;
     }
 
-    /**
-     * @ORM\OneToMany(targetEntity="Ticket", mappedBy="id_client")
-     */
-    private $tickets;
 
-    public function __construct()
-    {
-        $this->tickets = new ArrayCollection();
-    }
 
 }
