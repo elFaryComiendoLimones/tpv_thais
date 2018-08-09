@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Product;
+use AppBundle\Form\ProductType;
 
 class ProductController extends Controller
 {
@@ -30,6 +31,18 @@ class ProductController extends Controller
         );
 
         return $this->render('products/products.html.twig', $params);
+    }
+
+    /**
+     * @Route("/create-products", name="create-products")
+     */
+    public function createProducts()
+    {
+        $product = new Product();
+        $dataProvider = array('patatas'=>'con huevos', 'bocata' => 'chorizo');
+        $form = $this->createForm(ProductType::class, $product);
+
+        return $this->render('products/create-products.html.twig', ['form' => $form->createView()]);
     }
 
 }

@@ -54,7 +54,6 @@ class Ticket
 
     public function __construct()
     {
-        parent::__construct();
         $this->ticket_details = new ArrayCollection();
     }
 

@@ -19,7 +19,7 @@
                 <th scope="row">imagen</th>
                 <td>{{ p.name }}</td>
                 <td>{{ p.description }}</td>
-                <td>{{ p.id_provider.name }}</td>
+                <td>{{ p.getIdProvider().getName() }}</td>
                 <td>{{ p.price }}</td>
                 <td colspan="2">
                     <button type="button" class="btn btn-warning">Editar</button>
@@ -30,7 +30,7 @@
         </tbody>
     </table>
 
-    <a class="btn btn-dark" href="">Añadir Producto</a>
+    <a class="btn btn-dark" href="{{ path('create-products') }}">Añadir Producto</a>
 
     {#{{ dump(products) }}#}
 {% endblock %}
