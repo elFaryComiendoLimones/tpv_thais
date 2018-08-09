@@ -29,20 +29,19 @@ class EmployeeController extends Controller
     }
 
     /**
-     * @Route("/register-employee", name="register-employee")
+     * @Route("/employees", name="employees")
      */
     //Provisional , solo se ha insertado un admin pasando parámetros a mano
     public function registerAdmin()
     {
 
-        $userManager = $this->get('fos_user.user_manager');
+        $userManager = $this->getDoctrine()->getRepository(User::class);
 
-        $user = $userManager->createUser();
-        $user->read();
+        $users = $userManager->findAll();
 
-        //$userManager->updateUser($user);
+        $params = array('users' => $users);
 
-        return $this->render('pruebas/prueba.html.twig', ['user' => $user]);
+        return $this->render('employee/employee.html.twig', $params);
     }
 
 

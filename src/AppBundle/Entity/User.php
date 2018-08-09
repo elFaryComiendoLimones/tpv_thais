@@ -6,6 +6,7 @@ namespace AppBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Traits\Common;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -23,9 +24,33 @@ class User extends BaseUser
      */
     protected $id;
 
+
+    /**
+     * @return mixed
+     */
+    public function getTickets()
+    {
+        return $this->tickets;
+    }
+
+    /**
+     * @param mixed $tickets
+     */
+    public function setTickets($tickets)
+    {
+        $this->tickets = $tickets;
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="Ticket", mappedBy="id_user")
+     */
+    private $tickets;
+
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+        $this->tickets = new ArrayCollection();
     }
+
+
 }

@@ -12,7 +12,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active" title="Dashboard">
-                    <a href="#">
+                    <a href="{{ path('homepage') }}">
                         <i class="fas fa-th-large"></i>
                         <span>Dashboard</span>
                     </a>
@@ -38,7 +38,7 @@
                     </a>
                 </li>
                 <li title="Empleados">
-                    <a href="{{ path('fos_user_registration_register') }}">
+                    <a href="{{ path('employees') }}">
                         <i class="fas fa-briefcase"></i>
                         <span>Empleados</span>
                     </a>

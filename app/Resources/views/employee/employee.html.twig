@@ -1,0 +1,32 @@
+{% extends 'sidebar.html.twig' %}
+
+{% block content %}
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Email</th>
+            <th scope="col" colspan="2">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set cont = 1 %}
+        {% for user in users %}
+            <tr>
+                <th scope="row">{{ cont }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td colspan="2">
+                    <button type="button" class="btn btn-warning">Editar</button>
+                    <button type="button" class="btn btn-danger">Eliminar</button>
+                </td>
+            </tr>
+            {% set cont = cont + 1 %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-dark" href="{{ path('fos_user_registration_register') }}">Añadir empleado</a>
+
+{% endblock %}

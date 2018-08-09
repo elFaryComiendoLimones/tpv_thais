@@ -44,19 +44,18 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center mb-5">Bootstrap 4 Register Form</h2>
                 <div class="row">
                     <div class="col-md-6 mx-auto">
                         <div class="card border-secondary">
                             <div class="card-header">
-                                <h3 class="mb-0 my-2">Sign Up</h3>
+                                <h3 class="mb-0 my-2">Dar de alta a empleado</h3>
                             </div>
                             <div class="card-body">
                                 <form class="form" role="form" autocomplete="off" name="fos_user_registration_form"
                                       method="post" action="{{ path('fos_user_registration_register') }}">
                                     <div class="form-group">
                                         <label for="name">Nombre</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Name" name="fos_user_registration_form[username]" maxlength="180" pattern=".{2,}" required>
+                                        <input type="text" class="form-control" id="name" placeholder="Nombre" name="fos_user_registration_form[username]" maxlength="180" pattern=".{2,}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Email</label>
@@ -66,18 +65,18 @@
                                     <div class="form-group">
                                         <label for="inputPassword3">Contraseña</label>
                                         <input type="password" class="form-control" id="password"
-                                               placeholder="password"
-                                               title="At least 6 characters with letters and numbers" name="fos_user_registration_form[plainPassword][first]" required>
+                                               placeholder="Introduce la contraseña"
+                                               title="Al menos 6 caracteres con números y letras" name="fos_user_registration_form[plainPassword][first]" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputVerify3">Verify</label>
+                                        <label for="inputVerify3">Verificar contraseña</label>
                                         <input type="password" class="form-control" id="inputVerify3"
-                                               placeholder="password (again)" name="fos_user_registration_form[plainPassword][second]" required>
+                                               placeholder="Repite la contraseña" name="fos_user_registration_form[plainPassword][second]" required>
                                     </div>
                                     <input type="hidden" id="fos_user_registration_form__token" name="fos_user_registration_form[_token]"
                                            value="gAJpXzrF-XrSe11vQNQ21Q6zOb_CDlTM1gy2Ck-b5xs">
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-success btn-lg float-right">Register
+                                        <button type="submit" class="btn btn-success btn-lg float-right">Registrar
                                         </button>
                                     </div>
                                 </form>
@@ -94,5 +93,6 @@
     </div>
     <!--/container-->
 
+    <a class="btn btn-dark" href="{{ path('employees') }}">Volver</a>
 
 {% endblock %}
