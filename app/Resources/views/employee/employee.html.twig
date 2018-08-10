@@ -16,7 +16,15 @@
         {% for user in users %}
             <tr>
                 <th scope="row">{{ cont }}</th>
-                <td>imagen</td>
+                <td>
+                    <div class="image-perfil">
+                        {% if user.image is not empty %}
+                            <img alt="imagen perfil" src="{{ asset('uploads/img/user/' ~ user.image) }}">
+                        {% else %}
+                            <img alt="imagen perfil" src="{{ asset('uploads/img/user/user.png') }}">
+                        {% endif %}
+                    </div>
+                </td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td colspan="2">

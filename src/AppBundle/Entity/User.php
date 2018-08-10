@@ -29,11 +29,34 @@ class User extends BaseUser
      */
     private $tickets;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $image;
+
     public function __construct()
     {
         parent::__construct();
         $this->tickets = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+
+    }
 
 }

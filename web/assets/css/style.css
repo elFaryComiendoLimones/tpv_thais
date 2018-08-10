@@ -313,3 +313,24 @@ a.article:hover {
     }
 }
 /*fin sidebar*/
+
+.image-perfil{
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.image-perfil img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.check-roles label{
+    margin-right: 20px;
+}
+
+.check-roles input{
+    margin-right: 5px;
+}

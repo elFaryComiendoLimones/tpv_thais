@@ -7,6 +7,8 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    img_user_directory: '%kernel.project_dir%/web/uploads/img/user'
+    img_user_directory: '%kernel.project_dir%/web/uploads/img/product'
 
 framework:
     #esi: ~
@@ -82,3 +84,6 @@ fos_user:
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
+    registration:
+      form:
+        type: AppBundle\Form\RegistrationFormType
