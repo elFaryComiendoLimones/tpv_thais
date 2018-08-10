@@ -60,6 +60,11 @@ class Product
     private $active;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $image;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -169,6 +174,22 @@ class Product
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 
 

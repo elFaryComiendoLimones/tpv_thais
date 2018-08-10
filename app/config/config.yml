@@ -8,7 +8,7 @@ imports:
 parameters:
     locale: en
     img_user_directory: '%kernel.project_dir%/web/uploads/img/user'
-    img_user_directory: '%kernel.project_dir%/web/uploads/img/product'
+    img_product_directory: '%kernel.project_dir%/web/uploads/img/product'
 
 framework:
     #esi: ~
