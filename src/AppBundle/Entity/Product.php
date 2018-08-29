@@ -29,7 +29,7 @@ class Product
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $bar_code;
 
@@ -50,7 +50,7 @@ class Product
     private $price;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
 
@@ -60,7 +60,7 @@ class Product
     private $active;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $image;
 

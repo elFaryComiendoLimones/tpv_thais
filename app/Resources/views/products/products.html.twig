@@ -2,6 +2,16 @@
 
 {% block content %}
 <h1>Lista de productos</h1>
+
+    {% if confirmed is defined and confirmed is not empty %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Producto creado!</strong> Tu producto se ha insertado correctamente
+        </div>
+    {% endif %}
+
     <table class="table">
         <thead class="thead-dark">
         <tr>
@@ -22,8 +32,8 @@
                 <td>{{ p.getIdProvider().getName() }}</td>
                 <td>{{ p.price }}</td>
                 <td colspan="2">
-                    <button type="button" class="btn btn-warning">Editar</button>
-                    <button type="button" class="btn btn-danger">Eliminar</button>
+                    <a href="{{ path('edit-product', {'id' : p.id}) }}" class="btn btn-warning">Editar</a>
+                    <a href="{{ path('delete-product', {'id' : p.id}) }}" class="btn btn-danger rm-product">Eliminar</a>
                 </td>
             </tr>
         {% endfor %}
@@ -32,5 +42,9 @@
 
     <a class="btn btn-dark" href="{{ path('create-products') }}">Añadir Producto</a>
 
-    {#{{ dump(products) }}#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/product.js') }}"></script>
 {% endblock %}

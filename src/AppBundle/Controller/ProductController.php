@@ -24,7 +24,7 @@ class ProductController extends Controller
     {
 
         $productManager = $this->getDoctrine()->getRepository(Product::class);
-        $products = $productManager->findAll();
+        $products = $productManager->findByActive(1);
 
         $params = array(
             'products' => $products
@@ -62,10 +62,85 @@ class ProductController extends Controller
             $productManager->persist($product);
             $productManager->flush();
 
-            //return $this->redirectToRoute('task_success');
+            /*Resetear el formulario después de insertar correctamente el producto*/
+            unset($form);
+            unset($product);
+            $product = new Product();
+            $form = $this->createForm(ProductType::class, $product);
+
+
+            return $this->render('products/create-products.html.twig', ['form' => $form->createView(), 'confirmed' => true]);
         }
 
-        return $this->render('products/create-products.html.twig', ['form' => $form->createView(), 'product' => $product]);
+        return $this->render('products/create-products.html.twig', ['form' => $form->createView(), 'confirmed' => '']);
+    }
+
+    /**
+     *@Route("/delete-product/{id}", name="delete-product")
+     */
+    public function deleteProduct($id){
+
+        $productRepository = $this->getDoctrine()->getRepository(Product::class);
+        //$product = $productRepository->find(Request::createFromGlobals()->query->get('id'));
+        $product = $productRepository->find($id);
+
+        $product->setActive(0);
+
+        $productManager = $this->getDoctrine()->getManager();
+        $productManager->flush();
+
+        return $this->redirectToRoute('products');
+
+    }
+
+    /**
+     * @Route("/edit-product/{id}", defaults={"id"=""}, name="edit-product")
+     */
+    public function editProduct(Request $request, $id){
+
+        $productRepository = $this->getDoctrine()->getRepository(Product::class);
+        //$product = $productRepository->find(Request::createFromGlobals()->query->get('id'));
+        $product = $productRepository->find($id);
+
+        $form = $this->createForm(ProductType::class, $product);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$product` variable has also been updated
+            $product = $form->getData();
+
+            /*Añadir imagen*/
+            $image = $product->getImage();
+            if (!empty($image)) {
+                $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+                $image->move(
+                    $this->getParameter('img_product_directory'),
+                    $imageName
+                );
+            }
+
+            $productManager = $this->getDoctrine()->getManager();
+            $productManager->merge($product);
+            $productManager->flush();
+
+            $confirmed = true;
+
+            //return $this->render('products/products.html.twig', ['form' => $form->createView(), 'confirmed' => $product]);
+            $this->redirectToRoute('edit-product', ['id' => $product->getId()]);
+        }
+
+        $params = [
+            'form' => $form->createView(),
+        ];
+
+        if(!empty($confirmed)){
+            $params['confirmed'] = $confirmed;
+        }
+
+        return $this->render('products/edit-product.html.twig', $params);
+
     }
 
 }

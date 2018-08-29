@@ -20,6 +20,7 @@ use AppBundle\Entity\Provider;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class ProductType extends AbstractType
 {
@@ -29,6 +30,7 @@ class ProductType extends AbstractType
 
 
         $builder
+            ->add('id', HiddenType::class)
             ->add('bar_code', null, array('label' => 'Código de barras', 'attr' => array('class' => 'form-control', 'placeholder' => 'Código de barras')))
             ->add('name', null, array('label' => 'Nombre', 'attr' => array('class' => 'form-control', 'placeholder' => 'Nombre del producto')))
             ->add('price', MoneyType::class, array('label' => 'Precio', 'attr' => array('class' => 'form-control', 'placeholder' => 'Precio del producto')))
