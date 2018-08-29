@@ -64,6 +64,11 @@ class Product
      */
     private $image;
 
+    public function __construct()
+    {
+        $this->active = 1;
+    }
+
     /**
      * @return mixed
      */

@@ -39,7 +39,7 @@ class ProductType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control')
             ))
-            ->add('image', FileType::class, array('label' => 'Imagen de perfil', 'translation_domain' => 'FOSUserBundle', 'attr' => array('class' => 'form-control')))
+            ->add('image', FileType::class, array('label' => 'Imagen de perfil', 'translation_domain' => 'FOSUserBundle', 'attr' => array('class' => 'form-control'), 'required' => false))
             ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-success btn-lg float-right')));
     }
 

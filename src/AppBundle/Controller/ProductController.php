@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Product;
 use AppBundle\Form\ProductType;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductController extends Controller
 {
@@ -23,7 +24,6 @@ class ProductController extends Controller
     {
 
         $productManager = $this->getDoctrine()->getRepository(Product::class);
-
         $products = $productManager->findAll();
 
         $params = array(
@@ -36,13 +36,36 @@ class ProductController extends Controller
     /**
      * @Route("/create-products", name="create-products")
      */
-    public function createProducts()
+    public function createProducts(Request $request)
     {
         $product = new Product();
-        $dataProvider = array('patatas'=>'con huevos', 'bocata' => 'chorizo');
         $form = $this->createForm(ProductType::class, $product);
 
-        return $this->render('products/create-products.html.twig', ['form' => $form->createView()]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$product` variable has also been updated
+            $product = $form->getData();
+
+            /*Añadir imagen*/
+            $image = $product->getImage();
+            if (!empty($image)) {
+                $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+                $image->move(
+                    $this->getParameter('img_product_directory'),
+                    $imageName
+                );
+            }
+
+            $productManager = $this->getDoctrine()->getManager();
+            $productManager->persist($product);
+            $productManager->flush();
+
+            //return $this->redirectToRoute('task_success');
+        }
+
+        return $this->render('products/create-products.html.twig', ['form' => $form->createView(), 'product' => $product]);
     }
 
 }
