@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class RegistrationFormType extends AbstractType
+class EditUserType extends AbstractType
 {
 
     /**
@@ -31,6 +31,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('id', HiddenType::class)
             ->add('email', EmailType::class, array('label' => 'Email', 'translation_domain' => 'FOSUserBundle', 'attr' => array('class' => 'form-control', 'placeholder' => 'Introduce el email')))
             ->add('username', null, array('label' => 'Nombre', 'translation_domain' => 'FOSUserBundle', 'attr' => array('class' => 'form-control', 'placeholder' => 'Introduce nombre')))
             ->add('plainPassword', RepeatedType::class, array(
@@ -45,7 +46,7 @@ class RegistrationFormType extends AbstractType
                 'second_options' => array('label' => 'Confirmación de contraseña', 'attr' => array('class' => 'form-control', 'placeholder' => 'Repite la contraseña')),
                 'invalid_message' => 'fos_user.password.mismatch',
             ))
-            ->add('image', FileType::class, array('required' => false, 'label' => 'Imagen de perfil', 'translation_domain' => 'FOSUserBundle', 'attr' => array('class' => 'form-control')))
+            ->add('image', FileType::class, array('data_class' => null, 'required' => false, 'label' => 'Imagen de perfil', 'translation_domain' => 'FOSUserBundle', 'attr' => array('class' => 'form-control')))
             ->add(
                 'roles', ChoiceType::class, [
                     'choices' => ['Administrador' => 'ROLE_ADMIN', 'Empleado' => 'ROLE_USER'],
@@ -83,6 +84,6 @@ class RegistrationFormType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'fos_user_registration';
+        return 'fos_user_edit';
     }
 }

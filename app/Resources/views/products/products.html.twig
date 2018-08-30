@@ -26,14 +26,24 @@
         <tbody>
         {% for p in products %}
             <tr>
-                <th scope="row">imagen</th>
+                <th scope="row">
+                    <div class="image-product">
+                        {% if p.image is not empty %}
+                            <img alt="imagen producto" src="{{ asset('uploads/img/product/' ~ p.image) }}">
+                        {% else %}
+                            <img alt="imagen producto" src="{{ asset('uploads/img/product/letter-p.png') }}">
+                        {% endif %}
+                    </div>
+                </th>
                 <td>{{ p.name }}</td>
                 <td>{{ p.description }}</td>
                 <td>{{ p.getIdProvider().getName() }}</td>
                 <td>{{ p.price }}</td>
                 <td colspan="2">
                     <a href="{{ path('edit-product', {'id' : p.id}) }}" class="btn btn-warning">Editar</a>
-                    <a href="{{ path('delete-product', {'id' : p.id}) }}" class="btn btn-danger rm-product">Eliminar</a>
+                    <a href="{{ path('delete-product', {'id' : p.id}) }}" class="btn btn-danger message-confirm" data-confirm="¿Estás seguro de borrar el producto?" data-confirmed="El producto se ha borrado correctamente!">
+                        Eliminar
+                    </a>
                 </td>
             </tr>
         {% endfor %}
@@ -46,5 +56,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('assets/js/product.js') }}"></script>
+    <script src="{{ asset('assets/js/confirm.js') }}"></script>
 {% endblock %}

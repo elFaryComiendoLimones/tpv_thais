@@ -1,6 +1,15 @@
 {% extends 'sidebar.html.twig' %}
 {% block content %}
-    <h1>Editar Perfil</h1>
+    <h1>Editar Empleado</h1>
+
+    {% if confirmed is defined and confirmed is not empty %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Empleado!</strong> El empleado se ha editado correctamente
+        </div>
+    {% endif %}
 
     <div class="container py-5">
         <div class="row">
@@ -9,14 +18,10 @@
                     <div class="col-md-6 mx-auto">
                         <div class="card border-secondary">
                             <div class="card-header">
-                                <h3 class="mb-0 my-2">Datos del perfil</h3>
+                                <h3 class="mb-0 my-2">Datos Empleado</h3>
                             </div>
                             <div class="card-body">
-                                {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
-                                <div class="form-group">
-                                    {{ form_label(form.current_password) }}
-                                    {{ form_widget(form.current_password) }}
-                                </div>
+                                {{ form_start(form, {'action': path('edit-user'), 'method': 'POST'}) }}
                                 <div class="form-group">
                                     {{ form_label(form.username) }}
                                     {{ form_widget(form.username) }}
@@ -26,10 +31,20 @@
                                     {{ form_widget(form.email) }}
                                 </div>
                                 <div class="form-group">
+                                    {{ form_widget(form.plainPassword) }}
+                                </div>
+                                <div class="form-group">
                                     {{ form_label(form.image) }}
                                     {{ form_widget(form.image) }}
                                 </div>
-                                <button type="submit" class="btn btn-success btn-lg float-right">Editar</button>
+                                <div class="form-group">
+                                    {{ form_label(form.roles) }}
+                                    {{ form_widget(form.roles) }}
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-lg float-right">Actualizar
+                                    </button>
+                                </div>
                                 {{ form_end(form) }}
                             </div>
                         </div>
@@ -43,5 +58,5 @@
         <!--/row-->
     </div>
     <!--/container-->
-    <a class="btn btn-dark" href="{{ path('homepage') }}">Volver</a>
+    <a class="btn btn-dark" href="{{ path('products') }}">Volver</a>
 {% endblock %}

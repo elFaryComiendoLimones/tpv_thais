@@ -1,5 +1,9 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
 {% if error %}
     <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
@@ -30,3 +34,4 @@
         <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
     </form>
 </div>
+{% endblock %}

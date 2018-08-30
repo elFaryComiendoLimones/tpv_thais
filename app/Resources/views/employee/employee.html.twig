@@ -28,8 +28,10 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td colspan="2">
-                    <button type="button" class="btn btn-warning">Editar</button>
-                    <button type="button" class="btn btn-danger">Eliminar</button>
+                    <a href="{{ path('edit-user', { 'id' : user.id }) }}" class="btn btn-warning">Editar</a>
+                    <a href="{{ path('delete-user', { 'id': user.id }) }}" class="btn btn-danger message-confirm" data-confirm="¿Estás seguro de borrar el empleado?" data-confirmed="El empleado se ha borrado correctamente!">
+                        Eliminar
+                    </a>
                 </td>
             </tr>
             {% set cont = cont + 1 %}
@@ -39,4 +41,9 @@
 
     <a class="btn btn-dark" href="{{ path('fos_user_registration_register') }}">Añadir empleado</a>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/confirm.js') }}"></script>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use FOS\UserBundle\Form\Type\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,7 @@ class EmployeeController extends Controller
     /**
      * @Route("/employees", name="employees")
      */
-    public function registerAdmin()
+    public function listUsers()
     {
         $userManager = $this->getDoctrine()->getRepository(User::class);
 
@@ -36,10 +37,12 @@ class EmployeeController extends Controller
 
         return $this->render('employee/employee.html.twig', $params);
     }
+
     /**
-     *@Route("/delete-user/{id}", name="delete-user")
+     * @Route("/delete-user/{id}", name="delete-user")
      */
-    public function deleteUser($id){
+    public function deleteUser($id)
+    {
 
         $userRepository = $this->getDoctrine()->getRepository(User::class);
         //$product = $productRepository->find(Request::createFromGlobals()->query->get('id'));
@@ -51,18 +54,60 @@ class EmployeeController extends Controller
         $userManager->flush();
 
         return $this->redirectToRoute('employees');
-
     }
 
     /**
      * @Route("/edit-user/{id}", defaults={"id"=""}, name="edit-user")
      */
-    public function editUser(Request $request, $id){
+    public function editUser(Request $request, $id)
+    {
 
+        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepository->find($id);
 
+        $form = $this->createForm(\AppBundle\Form\EditUserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $user = $form->getData();
+
+            $user->setEnabled(true);
+
+            /*Añadir imagen*/
+            $image = $user->getImage();
+            if (!empty($image)) {
+                $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+                $image->move(
+                    $this->getParameter('img_user_directory'),
+                    $imageName
+                );
+
+                $user->setImage($imageName);
+            }
+
+            //$this->userManager->updateUser($user);
+            $userManager = $this->getDoctrine()->getManager();
+            $userManager->merge($user);
+            $userManager->flush();
+
+            $confirmed = true;
+
+            $this->redirectToRoute('edit-product', ['id' => $user->getId()]);
+
+        }
+
+        $params = [
+            'form' => $form->createView(),
+        ];
+
+        if (!empty($confirmed)) {
+            $params['confirmed'] = $confirmed;
+        }
+
+        return $this->render('employee/edit-employee.html.twig', $params);
 
     }
-
 
 
 }

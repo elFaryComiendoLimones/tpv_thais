@@ -56,6 +56,7 @@ class ProductController extends Controller
                     $this->getParameter('img_product_directory'),
                     $imageName
                 );
+                $product->setImage($imageName);
             }
 
             $productManager = $this->getDoctrine()->getManager();
@@ -119,6 +120,7 @@ class ProductController extends Controller
                     $this->getParameter('img_product_directory'),
                     $imageName
                 );
+                $product->setImage($imageName);
             }
 
             $productManager = $this->getDoctrine()->getManager();

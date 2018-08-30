@@ -87,3 +87,8 @@ fos_user:
     registration:
       form:
         type: AppBundle\Form\RegistrationFormType
+
+easy_admin:
+    entities:
+        - AppBundle\Entity\User
+    site_name: 'Empleados'

@@ -1,23 +1,23 @@
 $(document).ready(function () {
 
-    $('a.rm-product').on('click', function(e){
+    $('a.message-confirm').on('click', function(e){
         e.preventDefault();
         var linkURL = $(this).attr("href");
-        confirm(linkURL);
+        confirm(linkURL, $(this));
     });
 
 });
 
-function confirm(linkURL) {
+function confirm(linkURL, element) {
     swal({
-        title: "¿Estás seguro/a de borrar el producto?",
+        title: element.data('confirm'),
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
         .then((willDelete) => {
             if (willDelete) {
-                swal("El producto se ha borrado correctamente!", {
+                swal(element.data('confirmed'), {
                     icon: "success",
                 }).then((value) => {
                     window.location.href = linkURL;
