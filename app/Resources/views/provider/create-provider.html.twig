@@ -1,0 +1,67 @@
+{% extends 'sidebar.html.twig' %}
+{% block content %}
+    <h1>Crear Proveedor</h1>
+
+    {% if confirmed is defined and confirmed is not empty %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Provedor creado!</strong> El proveedor se ha insertado correctamente
+        </div>
+    {% endif %}
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 mx-auto">
+                        <div class="card border-secondary">
+                            <div class="card-header">
+                                <h3 class="mb-0 my-2">Añadir proveedor</h3>
+                            </div>
+                            <div class="card-body">
+                                {{ form_start(form, {'action': path('create-provider'), 'method': 'POST'}) }}
+                                <div class="form-group">
+                                    {{ form_label(form.name) }}
+                                    {{ form_widget(form.name) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.telefono) }}
+                                    {{ form_widget(form.telefono) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.email) }}
+                                    {{ form_widget(form.email) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.town) }}
+                                    {{ form_widget(form.town) }}
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form_label(form.postcode) }}
+                                    {{ form_widget(form.postcode) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.address) }}
+                                    {{ form_widget(form.address) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_widget(form.save) }}
+                                </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/row-->
+
+            </div>
+            <!--/col-->
+        </div>
+        <!--/row-->
+    </div>
+    <!--/container-->
+    <a class="btn btn-dark" href="{{ path('providers') }}">Volver</a>
+{% endblock %}
