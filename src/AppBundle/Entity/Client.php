@@ -41,7 +41,7 @@ class Client
     private $surname1;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $surname2;
 
@@ -51,32 +51,32 @@ class Client
     private $dni;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $province;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $town;
 
     /**
-     * @ORM\Column(type="integer", length=9)
+     * @ORM\Column(type="integer", length=9, nullable=true)
      */
     private $postcode;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $street;
 
     /**
-     * @ORM\Column(type="integer", length=200)
+     * @ORM\Column(type="integer", length=200, nullable=true)
      */
     private $num_street;
 
     /**
-     * @ORM\Column(type="bigint", length=200)
+     * @ORM\Column(type="bigint", length=200, nullable=true)
      */
     private $birthdate;
 
@@ -86,7 +86,7 @@ class Client
     private $telephone;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $email;
 
@@ -346,7 +346,5 @@ class Client
     {
         $this->tickets = $tickets;
     }
-
-
 
 }

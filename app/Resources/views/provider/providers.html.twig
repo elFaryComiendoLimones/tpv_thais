@@ -3,15 +3,6 @@
 {% block content %}
 <h1>Lista de Proveedores</h1>
 
-    {% if confirmed is defined and confirmed is not empty %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <strong>Proveedor!</strong> Tu proveedor se ha insertado correctamente
-        </div>
-    {% endif %}
-
     <table class="table">
         <thead class="thead-dark">
         <tr>
@@ -34,8 +25,8 @@
                 <td>{{ p.postcode }}</td>
                 <td>{{ p.address }}</td>
                 <td colspan="2">
-                    <a href="{{ path('edit-product', {'id' : p.id}) }}" class="btn btn-warning">Editar</a>
-                    <a href="{{ path('delete-product', {'id' : p.id}) }}" class="btn btn-danger message-confirm" data-confirm="¿Estás seguro de borrar el producto?" data-confirmed="El producto se ha borrado correctamente!">
+                    <a href="{{ path('edit-provider', {'id' : p.id}) }}" class="btn btn-warning">Editar</a>
+                    <a href="{{ path('delete-provider', {'id' : p.id}) }}" class="btn btn-danger message-confirm" data-confirm="¿Estás seguro de borrar el proveedor?" data-confirmed="El proveedor se ha borrado correctamente!">
                         Eliminar
                     </a>
                 </td>
@@ -44,7 +35,7 @@
         </tbody>
     </table>
 
-    <a class="btn btn-dark" href="{{ path('create-products') }}">Añadir Proveedor</a>
+    <a class="btn btn-dark" href="{{ path('create-provider') }}">Añadir Proveedor</a>
 
 {% endblock %}
 

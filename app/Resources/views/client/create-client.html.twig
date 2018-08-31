@@ -1,13 +1,13 @@
 {% extends 'sidebar.html.twig' %}
 {% block content %}
-    <h1>Editar proveedor</h1>
+    <h1>Crear Cliente</h1>
 
     {% if confirmed is defined and confirmed is not empty %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <strong>Proveedor editado!</strong> Tu proveedor se ha editado correctamente
+            <strong>Cliente creado!</strong> El cliente se ha insertado correctamente
         </div>
     {% endif %}
 
@@ -18,34 +18,57 @@
                     <div class="col-md-6 mx-auto">
                         <div class="card border-secondary">
                             <div class="card-header">
-                                <h3 class="mb-0 my-2">Datos del proveedor</h3>
+                                <h3 class="mb-0 my-2">Añadir cliente</h3>
                             </div>
                             <div class="card-body">
-                                {{ form_start(form, {'action': path('edit-provider'), 'method': 'POST'}) }}
+                                {{ form_start(form, {'action': path('create-client'), 'method': 'POST'}) }}
                                 <div class="form-group">
                                     {{ form_label(form.name) }}
                                     {{ form_widget(form.name) }}
                                 </div>
                                 <div class="form-group">
-                                    {{ form_label(form.telefono) }}
-                                    {{ form_widget(form.telefono) }}
+                                    {{ form_label(form.surname1) }}
+                                    {{ form_widget(form.surname1) }}
                                 </div>
                                 <div class="form-group">
-                                    {{ form_label(form.email) }}
-                                    {{ form_widget(form.email) }}
+                                    {{ form_label(form.surname2) }}
+                                    {{ form_widget(form.surname2) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.dni) }}
+                                    {{ form_widget(form.dni) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.province) }}
+                                    {{ form_widget(form.province) }}
                                 </div>
                                 <div class="form-group">
                                     {{ form_label(form.town) }}
                                     {{ form_widget(form.town) }}
                                 </div>
-
                                 <div class="form-group">
                                     {{ form_label(form.postcode) }}
                                     {{ form_widget(form.postcode) }}
                                 </div>
                                 <div class="form-group">
-                                    {{ form_label(form.address) }}
-                                    {{ form_widget(form.address) }}
+                                    {{ form_label(form.street) }}
+                                    {{ form_widget(form.street) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.num_street) }}
+                                    {{ form_widget(form.num_street) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.birthdate) }}
+                                    {{ form_widget(form.birthdate) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.telephone) }}
+                                    {{ form_widget(form.telephone) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.email) }}
+                                    {{ form_widget(form.email) }}
                                 </div>
                                 <div class="form-group">
                                     {{ form_widget(form.save) }}
@@ -63,5 +86,5 @@
         <!--/row-->
     </div>
     <!--/container-->
-    <a class="btn btn-dark" href="{{ path('providers') }}">Volver</a>
+    <a class="btn btn-dark" href="{{ path('clients') }}">Volver</a>
 {% endblock %}

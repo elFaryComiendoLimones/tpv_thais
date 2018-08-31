@@ -17,6 +17,12 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="{{ app.request.get('_route') == 'tpv' ? 'active' }}" title="Dashboard">
+                    <a href="{{ path('tpv') }}">
+                        <i class="fas fa-desktop"></i>
+                        <span>TPV</span>
+                    </a>
+                </li>
                 <li title="Stock" class="{{ app.request.get('_route') == 'products' or app.request.get('_route') == 'treatments' ? 'active' }}">
                     <a href="#stockSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-box"></i>
@@ -44,7 +50,7 @@
                     </a>
                 </li>
                 <li title="Clientes" class="{{ app.request.get('_route') == 'clients' ? 'active' }}">
-                    <a href="#">
+                    <a href="{{ path('clients') }}">
                         <i class="fas fa-users"></i>
                         <span>Clientes</span>
                     </a>

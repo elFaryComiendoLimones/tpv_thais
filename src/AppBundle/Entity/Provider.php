@@ -36,27 +36,27 @@ class Provider
     private $name;
 
     /**
-     * @ORM\Column(type="integer", length=200)
+     * @ORM\Column(type="integer", length=200, nullable=true)
      */
     private $telefono;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $town;
 
     /**
-     * @ORM\Column(type="integer", length=200)
+     * @ORM\Column(type="integer", length=200, nullable=true)
      */
     private $postcode;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $address;
 

@@ -31,12 +31,12 @@ class ProductType extends AbstractType
 
         $builder
             ->add('id', HiddenType::class)
-            ->add('bar_code', null, array('label' => 'Código de barras', 'attr' => array('class' => 'form-control', 'placeholder' => 'Código de barras')))
-            ->add('name', null, array('label' => 'Nombre', 'attr' => array('class' => 'form-control', 'placeholder' => 'Nombre del producto')))
-            ->add('price', MoneyType::class, array('label' => 'Precio', 'attr' => array('class' => 'form-control', 'placeholder' => 'Precio del producto')))
-            ->add('description', null, array('label' => 'Descripción', 'attr' => array('class' => 'form-control', 'placeholder' => 'Descipción del producto')))
+            ->add('bar_code', null, array('required' => false, 'label' => 'Código de barras', 'attr' => array('class' => 'form-control', 'placeholder' => 'Código de barras')))
+            ->add('name', null, array('label' => 'Nombre*', 'attr' => array('class' => 'form-control', 'placeholder' => 'Nombre del producto')))
+            ->add('price', MoneyType::class, array('label' => 'Precio*', 'attr' => array('class' => 'form-control', 'placeholder' => 'Precio del producto')))
+            ->add('description', null, array('required' => false, 'label' => 'Descripción', 'attr' => array('class' => 'form-control', 'placeholder' => 'Descripción del producto')))
             ->add('id_provider', EntityType::class, array(
-                'label' => 'Proveedor',
+                'label' => 'Proveedor*',
                 'class' => 'AppBundle:Provider',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control')

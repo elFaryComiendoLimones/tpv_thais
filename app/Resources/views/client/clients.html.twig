@@ -1,0 +1,66 @@
+{% extends 'sidebar.html.twig' %}
+
+{% block content %}
+<h1>Lista de Clientes</h1>
+
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Nº Compras</th>
+            <th scope="col" colspan="2">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for c in clients %}
+            <tr>
+                <th>{{ c.name }}</th>
+                <td>{{ c.surname1 ~ ' ' ~ c.surname2 }}</td>
+                <td>{{ c.telephone }}</td>
+                <td></td>
+                <td colspan="2">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dataClient" data-id="{{ c.id }}" data-path="{{ path('get-data') }}">
+                        Ver datos
+                    </button>
+                    <a href="{{ path('edit-client', {'id' : c.id}) }}" class="btn btn-warning">Editar</a>
+                    <a href="{{ path('delete-client', {'id' : c.id}) }}" class="btn btn-danger message-confirm" data-confirm="¿Estás seguro de borrar el cliente?" data-confirmed="El cliente se ha borrado correctamente!">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-dark" href="{{ path('create-client') }}">Añadir Cliente</a>
+
+    <!-- Modal -->
+    <div class="modal fade" id="dataClient" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Datos del cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="swal-button swal-button--confirm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/confirm.js') }}"></script>
+    <script src="{{ asset('assets/js/client.js') }}"></script>
+{% endblock %}
