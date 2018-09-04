@@ -1,5 +1,127 @@
 {% extends 'sidebar.html.twig' %}
 
 {% block content %}
-<h1>tpv</h1>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">PVP/U</th>
+                        <th scope="col">Subtotal</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Patatas</th>
+                        <td>1</td>
+                        <td>5.00</td>
+                        <td>5.00</td>
+                        <td>
+                            <i class="fas fa-plus-square"></i>
+                            <i class="fas fa-minus-square"></i>
+                            <i class="fas fa-window-close"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Tomates</th>
+                        <td>3</td>
+                        <td>3.20</td>
+                        <td>9.60</td>
+                        <td>
+                            <i class="fas fa-plus-square"></i>
+                            <i class="fas fa-minus-square"></i>
+                            <i class="fas fa-window-close"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Gachas</th>
+                        <td>4</td>
+                        <td>4.00</td>
+                        <td>16.00</td>
+                        <td>
+                            <i class="fas fa-plus-square"></i>
+                            <i class="fas fa-minus-square"></i>
+                            <i class="fas fa-window-close"></i>
+                        </td>
+                    </tr>
+                    <tfoot>
+                    <tr class="bg-dark text-white">
+                        <td>Total artículos</td>
+                        <td>3</td>
+                        <td></td>
+                        <td>30.60</td>
+                    </tr>
+                    </tfoot>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-danger">Cancelar</button>
+                <button type="button" class="btn btn-success">Facturar</button>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Tratamientos</a>
+                            </li>
+                            <li class="ml-auto">
+                                <button id="bt-list" type="button" class="btn btn-dark active">
+                                    <i class="fas fa-list-ul"></i>
+                                </button>
+                                <button id="bt-grid" type="button" class="btn btn-dark">
+                                    <i class="fas fa-th-large"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12">
+                        <input type="search" name="search-tpv" class="form-control" placeholder="Buscar...">
+                    </div>
+                </div>
+                <div id="list-view" class="row">
+                    <div class="col-12 mt-2">
+                        <div class="list-group">
+                            {#{% for p in products %}
+                                <a href="#" class="list-group-item list-group-item-action">{{ p.name }}</a>
+                            {% endfor %}#}
+                        </div>
+                    </div>
+                </div>
+                <div id="grid-view" class="row d-none">
+                    {#{% for p in products %}
+                        <div class="col-3 mt-2 cont-img">
+                            {% if p.image is not empty %}
+                                <img title="{{ p.name }}" alt="imagen producto" class=""
+                                     src="{{ asset('uploads/img/product/' ~ p.image) }}">
+                            {% else %}
+                                <img title="{{ p.name }}" alt="imagen producto"
+                                     src="{{ asset('uploads/img/product/letter-p.png') }}">
+                            {% endif %}
+                            <span class="d-block text-center">{{ p.name }}</span>
+                        </div>
+                    {% endfor %}#}
+                </div>
+                <div class="row">
+                    <div class="pagination-products" data-path="{{ path('get-data-products') }}">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/jquery.twbsPagination.min.js') }}"></script>
+    <script src="{{ asset('assets/js/tpv.js') }}"></script>
 {% endblock %}
