@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
+use AppBundle\Utils\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,11 +33,32 @@ class TPVController extends Controller
     /**
      * @Route("/get-data-products", name="get-data-products")
      */
-    public function getData()
+    public function getData(Request $request)
     {
 
         $em = $this->getDoctrine();
-        $products = $em->getRepository(Product::class)->findByActive(1);
+        /*Obtener el numero total de filas de la tabla*/
+        $rows = count($em->getRepository(Product::class)->findByActive(1));
+
+        $page = !empty($request->get('page')) ? $request->get('page') : 1;
+        $limit = 15;
+        $pagination = new Pagination($rows, $page, $limit);
+
+        $products = $em->getRepository(Product::class)->findByActive(1, null, $limit, $pagination->getOffset());
+
+        $data = [
+            'products' => $products,
+            'pagination' => [
+                'visible' => true,
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'actual' => $pagination->getActual()
+            ]
+        ];
+
+        if($rows < $limit){
+            $data['pagination']['visible'] = false;
+        }
 
         $encoder = new JsonEncoder();
 
@@ -51,7 +73,7 @@ class TPVController extends Controller
 
         $serializer = new Serializer(array($normalizer), array($encoder));
 
-        $response = $serializer->serialize($products, 'json');
+        $response = $serializer->serialize($data, 'json');
 
         $jsonResponse = new JsonResponse();
 
