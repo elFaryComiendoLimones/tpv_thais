@@ -107,12 +107,16 @@ function tpv() {
             '<td class="td_price">' + price + '</td>' +
             '<td class="td_total_price">' + totalPrice + '</td>' +
             '<td>' +
-            '  <i class="fas fa-plus-square"></i>' +
-            '  <i class="fas fa-minus-square"></i>' +
-            '  <i class="fas fa-window-close"></i>' +
+            '  <span class="sum action"><i class="fas fa-plus-square"></i></span>' +
+            '  <span class="minus action"><i class="fas fa-minus-square"></i></span>' +
+            '  <span class="rm action"><i class="fas fa-window-close"></i></span>' +
             '</td>' +
             '</tr>');
         table.find('tbody').append(tr);
+
+        /*asignar eventos a iconos de acción*/
+        tr.find('.sum').on('click', sum);
+
     }else{
 
         tr = table.find('tbody').find('tr[data-id_product="'+ idProduct +'"]');
@@ -131,6 +135,16 @@ function tpv() {
         totalPriceArticles = parseFloat(totalPriceArticles) + parseFloat($(this).text());
     });
     $('#table_total').find('.total_cant_articles').text(table.find('tbody').find('tr').length);
-    $('#table_total').find('.total_price_articles').text(parseFloat(totalPriceArticles).toFixed(2));
+    $('#table_total').find('.total_price_articles').text(parseFloat(totalPriceArticles).toFixed(2) + ' €');
 
+}
+
+function sum(){
+    tr = $(this).closest('tr');
+    var cant = parseInt(tr.find('.td_cant').text());
+    cant++;
+    var price = parseFloat(tr.find('.td_price').text()).toFixed(2);
+    var totalPrice = parseFloat(cant * price).toFixed(2);
+    tr.find('.td_cant').text(cant);
+    tr.find('.td_total_price').text(totalPrice);
 }
