@@ -454,3 +454,11 @@ a.article:hover {
 .min-h-400{
     min-height: 400px;
 }
+
+.td_name span{
+    display: block;
+    white-space: nowrap;
+    width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

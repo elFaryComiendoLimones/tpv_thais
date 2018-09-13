@@ -53,7 +53,7 @@ function paginateProducts() {
 function templateList(data) {
     var html = '';
     $.each(data, function (index, item) {
-        html += '<a href="#" class="list-group-item list-group-item-action product"data-id="' + item.id + '" data-price="' +item.price + '">' + item.name + '</a>';
+        html += '<a href="#" class="list-group-item list-group-item-action product"data-id="' + item.id + '" data-price="' + item.price + '">' + item.name + '</a>';
     });
     return html;
 }
@@ -75,7 +75,62 @@ function paginationTemplate(pagination) {
     return html;
 }
 
-function tpv(){
+function tpv() {
     var table = $('#table_sale');
+    var product = $(this);
+    var idProduct = product.data('id');
+    var productName = product.text();
+    var price = parseFloat(product.data('price')).toFixed(2);
+
+    //Comprobar si el producto ya se había insertado en la tabla
+    var exists = false;
+    $.each(table.find('tbody').find('tr'), function () {
+        if ($(this).data('id_product') == idProduct) {
+            exists = true;
+            return false;
+        }
+    });
+
+    //Pintar la nueva fila si existe o modificarla si ya existe
+    var cant = null;
+    var totalPrice = null;
+
+    var tr = null;
+    if (!exists) {
+
+        cant = 1;
+        totalPrice = price;
+
+        tr = $('<tr data-id_product="' + idProduct + '">' +
+            '<td class="td_name" title="'+ productName +'"><span>' + productName + '</span></td>' +
+            '<td class="td_cant">' + cant + '</td>' +
+            '<td class="td_price">' + price + '</td>' +
+            '<td class="td_total_price">' + totalPrice + '</td>' +
+            '<td>' +
+            '  <i class="fas fa-plus-square"></i>' +
+            '  <i class="fas fa-minus-square"></i>' +
+            '  <i class="fas fa-window-close"></i>' +
+            '</td>' +
+            '</tr>');
+        table.find('tbody').append(tr);
+    }else{
+
+        tr = table.find('tbody').find('tr[data-id_product="'+ idProduct +'"]');
+
+        cant = parseInt(tr.find('.td_cant').text());
+        cant++;
+        totalPrice = parseFloat(cant * price).toFixed(2);
+
+        tr.find('.td_cant').text(cant);
+        tr.find('.td_total_price').text(totalPrice);
+    }
+
+    //Calcular y pintar el precio total de todos los artículos
+    var totalPriceArticles = 0;
+    $.each(table.find('tbody').find('tr').find('.td_total_price'), function(){
+        totalPriceArticles = parseFloat(totalPriceArticles) + parseFloat($(this).text());
+    });
+    $('#table_total').find('.total_cant_articles').text(table.find('tbody').find('tr').length);
+    $('#table_total').find('.total_price_articles').text(parseFloat(totalPriceArticles).toFixed(2));
 
 }
