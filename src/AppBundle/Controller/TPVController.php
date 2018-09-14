@@ -41,7 +41,7 @@ class TPVController extends Controller
         $rows = count($em->getRepository(Product::class)->findByActive(1));
 
         $page = !empty($request->get('page')) ? $request->get('page') : 1;
-        $limit = 15;
+        $limit = 16;
         $pagination = new Pagination($rows, $page, $limit);
 
         $products = $em->getRepository(Product::class)->findByActive(1, null, $limit, $pagination->getOffset());
@@ -81,5 +81,13 @@ class TPVController extends Controller
     }
 
 
+    /**
+     *@Route("/add_line_to_cart", name="add_line_to_cart")
+     */
+    public function addLineToCart(){
+        //Añadir línea al carrito pasándole (id, producto, cantidad)
+        //Guardar carrito en la sesión
+
+    }
 
 }
