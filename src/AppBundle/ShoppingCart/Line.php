@@ -1,5 +1,7 @@
 <?php
 
+namespace AppBundle\ShoppingCart;
+
 class Line{
     private $id, $item, $cantidad;
     

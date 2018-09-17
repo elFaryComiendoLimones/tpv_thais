@@ -18,16 +18,32 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\ShoppingCart\Cart;
+use AppBundle\Service\CommonService;
 
 
 class TPVController extends Controller
 {
     /**
-     *@Route("/tpv", name="tpv")
+     * @Route("/tpv", name="tpv")
      */
-    public function index(Request $request){
+    public function index(CommonService $common)
+    {
+        //$shoppingCart = $this->shoppingCart();
+        $shoppingCart = $common->shoppingCart($this->get('session'));
 
-        return $this->render('tpv/tpv.html.twig');
+        $totalPrice = 0.00;
+        foreach ($shoppingCart->getCarrito() as $line){
+            $totalPrice = number_format($totalPrice + $line['cantidad'] * $line['item']->getPrice(), 2, '.', ',');
+        }
+
+        $params = [
+            'shoppingCart' => $shoppingCart->getCarrito(),
+            'totalPrice' => number_format($totalPrice, 2, '.', ',') . ' €',
+            'cant' => count($shoppingCart->getCarrito())
+        ];
+
+        return $this->render('tpv/tpv.html.twig', $params);
     }
 
     /**
@@ -56,7 +72,7 @@ class TPVController extends Controller
             ]
         ];
 
-        if($rows < $limit){
+        if ($rows < $limit) {
             $data['pagination']['visible'] = false;
         }
 
@@ -66,11 +82,9 @@ class TPVController extends Controller
         $normalizer->setIgnoredAttributes(array(
             'typeCode', 'type', 'range',
             'useCaseCode', 'useCase', 'updatedAt', 'updatedBy'));
-
         $normalizer->setCircularReferenceHandler(function ($object) {
             return $object->getName();
         });
-
         $serializer = new Serializer(array($normalizer), array($encoder));
 
         $response = $serializer->serialize($data, 'json');
@@ -80,14 +94,50 @@ class TPVController extends Controller
         return $jsonResponse::fromJsonString($response);
     }
 
-
     /**
-     *@Route("/add_line_to_cart", name="add_line_to_cart")
+     * @Route("/manage_cart", name="manage_cart")
      */
-    public function addLineToCart(){
-        //Añadir línea al carrito pasándole (id, producto, cantidad)
-        //Guardar carrito en la sesión
+    public function manageCart(Request $request)
+    {
+        $id = $request->get('id');
+        $action = $request->get('action');
 
+        $em = $this->getDoctrine();
+        $product = $em->getRepository(Product::class)->find($id);
+
+        //$shoppingCart = $this->shoppingCart();
+        $common = new CommonService();
+        $shoppingCart = $common->shoppingCart($this->get('session'));
+        switch ($action) {
+            case 'sum':
+                $cant = $request->get('cant');
+                $shoppingCart->add($id, $product, $cant);
+                break;
+            case 'minus':
+                $shoppingCart->sub($id, $product);
+                break;
+            case 'del':
+                $shoppingCart->del($id);
+                break;
+            case 'reset':
+                $shoppingCart->resetCart();
+                break;
+        }
+
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array(
+            'typeCode', 'type', 'range',
+            'useCaseCode', 'useCase', 'updatedAt', 'updatedBy'));
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getName();
+        });
+        $serializer = new Serializer(array($normalizer), array($encoder));
+
+        $response = $serializer->serialize($shoppingCart->getCarrito(), 'json');
+
+        $jsonResponse = new JsonResponse();
+        return $jsonResponse::fromJsonString($response);
     }
 
 }

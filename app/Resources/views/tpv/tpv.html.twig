@@ -3,6 +3,9 @@
 {% block content %}
 
     <input type="hidden" name="path_assets" value="{{ asset('uploads') }}">
+    <input type="hidden" name="path_manage_shopping_cart" value="{{ path('manage_cart') }}">
+    <input type="hidden" name="path_check_in" value="{{ path('check_in') }}">
+    <input type="hidden" name="path_save_details" value="{{ path('save_details') }}">
 
     <div class="container">
         <div class="row">
@@ -19,52 +22,34 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {#<tr>
-                            <th scope="row">Patatas</th>
-                            <td>1</td>
-                            <td>5.00</td>
-                            <td>5.00</td>
-                            <td>
-                                <i class="fas fa-plus-square"></i>
-                                <i class="fas fa-minus-square"></i>
-                                <i class="fas fa-window-close"></i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Tomates</th>
-                            <td>3</td>
-                            <td>3.20</td>
-                            <td>9.60</td>
-                            <td>
-                                <i class="fas fa-plus-square"></i>
-                                <i class="fas fa-minus-square"></i>
-                                <i class="fas fa-window-close"></i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Gachas</th>
-                            <td>4</td>
-                            <td>4.00</td>
-                            <td>16.00</td>
-                            <td>
-                                <i class="fas fa-plus-square"></i>
-                                <i class="fas fa-minus-square"></i>
-                                <i class="fas fa-window-close"></i>
-                            </td>
-                        </tr>#}
+                        {% if shoppingCart is not empty %}
+                            {% for data in shoppingCart %}
+                                <tr data-id_product="{{ data.item.id }}">
+                                    <td class="td_name" title="{{ data.item.name }}"><span>{{ data.item.name }}</span></td>
+                                    <td class="td_cant">{{ data.cantidad }}</td>
+                                    <td class="td_price">{{ data.item.price|number_format(2, '.', ',') }}</td>
+                                    <td class="td_total_price">{{ (data.item.price * data.cantidad)|number_format(2, '.', ',') }}</td>
+                                    <td>
+                                        <button class="sum action"><i class="fas fa-plus-square"></i></button>
+                                        <button class="minus action"><i class="fas fa-minus-square"></i></button>
+                                        <button class="rm action"><i class="fas fa-window-close"></i></button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
                 <table id="table_total" class="table">
                     <tr class="bg-dark text-white">
                         <td>Total artículos</td>
-                        <td class="total_cant_articles">0</td>
+                        <td class="total_cant_articles">{{ cant }}</td>
                         <td></td>
-                        <td class="total_price_articles">0.00</td>
+                        <td class="total_price_articles">{{ totalPrice }}</td>
                     </tr>
                 </table>
-                <button type="button" class="btn btn-danger">Cancelar</button>
-                <button type="button" class="btn btn-success">Facturar</button>
+                <button id="reset_ticket" type="button" class="btn btn-danger">Cancelar</button>
+                <button id="check_in" type="button" class="btn btn-success">Facturar</button>
             </div>
             <div class="col-6">
                 <div class="row">
@@ -93,29 +78,16 @@
                 <div id="list-view" class="row">
                     <div class="col-12 mt-2">
                         <div class="list-group">
-                            {#{% for p in products %}
-                                <a href="#" class="list-group-item list-group-item-action">{{ p.name }}</a>
-                            {% endfor %}#}
+                            {# Se carga por javascript la lista de productos #}
                         </div>
                     </div>
                 </div>
                 <div id="grid-view" class="row d-none">
-                    {#{% for p in products %}
-                        <div class="col-3 mt-2 cont-img">
-                            {% if p.image is not empty %}
-                                <img title="{{ p.name }}" alt="imagen producto" class=""
-                                     src="{{ asset('uploads/img/product/' ~ p.image) }}">
-                            {% else %}
-                                <img title="{{ p.name }}" alt="imagen producto"
-                                     src="{{ asset('uploads/img/product/letter-p.png') }}">
-                            {% endif %}
-                            <span class="d-block text-center">{{ p.name }}</span>
-                        </div>
-                    {% endfor %}#}
+                    {# Se carga por javascript la lista de productos #}
                 </div>
                 <div class="row">
                     <div id="pagination-products" class="col-12 mt-2" data-path="{{ path('get-data-products') }}">
-
+                        {# Se carga por javascript la paginación #}
                     </div>
                 </div>
             </div>

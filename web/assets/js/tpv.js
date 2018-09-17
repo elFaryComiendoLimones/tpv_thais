@@ -27,6 +27,17 @@ $(document).ready(function () {
     /*tooltip de productos y tratamientos en vista grid*/
     $('*[data-toggle="tooltip"]').tooltip();
 
+    //cancelar venta (resetear el carrito)
+    $('#reset_ticket').on('click', function () {
+        manageCart(null, null, 'reset');
+        $('#table_sale').find('tbody').children().remove();
+        $('.total_cant_articles').text(0);
+        $('.total_price_articles').text('0.00 €');
+    });
+
+    //Facturar la compra
+    $('#check_in').on('click', checkIn);
+
 });
 
 function paginateProducts(template, page = null) {
@@ -108,7 +119,6 @@ function paginationTemplate(pagination) {
 }
 
 
-/*Faltaría implementar el carrito*/
 function tpv() {
     var table = $('#table_sale');
     var product = $(this);
@@ -173,6 +183,9 @@ function tpv() {
     $('#table_total').find('.total_cant_articles').text(table.find('tbody').find('tr').length);
     $('#table_total').find('.total_price_articles').text(parseFloat(totalPriceArticles).toFixed(2) + ' €');
 
+    //añadir línea al carrito
+    manageCart(idProduct, cant, 'sum');
+
 }
 
 function sum() {
@@ -183,6 +196,9 @@ function sum() {
     var totalPrice = parseFloat(cant * price).toFixed(2);
     tr.find('.td_cant').text(cant);
     tr.find('.td_total_price').text(totalPrice);
+
+    //sumar al carrito
+    manageCart(tr.data('id_product'), null, 'sum');
 }
 
 function minus() {
@@ -194,21 +210,30 @@ function minus() {
         var totalPrice = parseFloat(cant * price).toFixed(2);
         tr.find('.td_cant').text(cant);
         tr.find('.td_total_price').text(totalPrice);
+
+        //restar cantidad al carrito
+        manageCart(tr.data('id_product'), cant,'minus');
     }
 }
 
 function removeRow() {
     tr = $(this).closest('tr');
+
+    manageCart(tr.data('id_product'), null, 'del');
+
     tr.remove();
 }
 
 /*Funciones del carrito*/
-function addLineToCart(){
+function manageCart(id ,cant, action){
     $.ajax({
-        url: /*add_line_to_cart*/,
+        url: $('input[name="path_manage_shopping_cart"]').val(),
         data: {
-            //id_producto
+            //id producto
+            id: id,
             //cantidad
+            cant: cant,
+            action: action
         },
         type: 'POST',
         dataType: 'json',
@@ -221,9 +246,54 @@ function addLineToCart(){
                 text: status,
                 icon: "error",
             });
+        }
+    });
+}
+
+//Genera un ticket con los datos del carrito y luego lo resetea
+function checkIn(){
+    $.ajax({
+        url: $('input[name="path_check_in"]').val(),
+        data: {
+
         },
-        complete: function (xhr, status) {
-            //alert('Petición realizada');
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            //Si el ticket se ha guardado
+            if(typeof data !== 'undefined'){
+                saveDetails(data);
+            }
+        },
+        error: function (xhr, status) {
+            swal({
+                title: "Error",
+                text: status,
+                icon: "error",
+            });
+        }
+    });
+}
+
+function saveDetails(idTicket){
+    $.ajax({
+        url: $('input[name="path_save_details"]').val(),
+        data: {
+            id: idTicket
+        },
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            if(data.length > 0){
+                alert('se han guardado ' + data.length + ' detalles');
+            }
+        },
+        error: function (xhr, status) {
+            swal({
+                title: "Error",
+                text: status,
+                icon: "error",
+            });
         }
     });
 }

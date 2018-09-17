@@ -1,7 +1,10 @@
 <?php
 
+namespace AppBundle\ShoppingCart;
+use AppBundle\ShoppingCart\Line;
+
 class Cart {
-    
+
     private $carrito = [];
     
     function __construct() {
@@ -51,10 +54,6 @@ class Cart {
 
     function del($id) {
         $line = new Line($id);
-        
-        //echo Util::varDump($line);
-        
-        //exit;
         $this->delLinea($line);
     }
     
@@ -82,6 +81,9 @@ class Cart {
     function getCarrito() {
         return $this->carrito;
     }
-    
+
+    function resetCart(){
+        $this->carrito = [];
+    }
     
 }
