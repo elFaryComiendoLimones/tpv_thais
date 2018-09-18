@@ -9,6 +9,7 @@
 namespace AppBundle\Service;
 
 use Symfony\Component\HttpFoundation\Session\Session;
+use AppBundle\ShoppingCart\Cart;
 
 
 

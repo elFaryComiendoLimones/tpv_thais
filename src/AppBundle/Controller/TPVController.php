@@ -124,6 +124,11 @@ class TPVController extends Controller
                 break;
         }
 
+        $lines = [];
+        foreach ($shoppingCart->getCarrito() as $line){
+            $lines[] = ['id' => $line['id'], 'cant' => $line['cantidad']];
+        }
+
         $encoder = new JsonEncoder();
         $normalizer = new ObjectNormalizer();
         $normalizer->setIgnoredAttributes(array(
@@ -134,7 +139,7 @@ class TPVController extends Controller
         });
         $serializer = new Serializer(array($normalizer), array($encoder));
 
-        $response = $serializer->serialize($shoppingCart->getCarrito(), 'json');
+        $response = $serializer->serialize($lines, 'json');
 
         $jsonResponse = new JsonResponse();
         return $jsonResponse::fromJsonString($response);

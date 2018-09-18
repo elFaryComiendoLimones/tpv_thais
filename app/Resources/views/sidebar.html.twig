@@ -3,6 +3,12 @@
 {% block body %}
     {#<h1>Estás loggeado {{ user.username }}</h1>#}
     <div class="wrapper">
+        <!-- Mensaje de carga general -->
+        <div class="spinner d-none">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
@@ -56,7 +62,7 @@
                     </a>
                 </li>
                 <li title="Ventas" class="{{ app.request.get('_route') == 'tickets' ? 'active' }}">
-                    <a href="#">
+                    <a href="{{ path('tickets') }}">
                         <i class="fas fa-chart-line"></i>
                         <span>Ventas</span>
                     </a>

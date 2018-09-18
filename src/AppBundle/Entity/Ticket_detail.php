@@ -36,7 +36,7 @@ class Ticket_detail
     private $id_ticket;
 
     /**
-     * @ORM\OneToOne(targetEntity="Product")
+     * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(name="id_product", referencedColumnName="id")
      */
     private $id_product;

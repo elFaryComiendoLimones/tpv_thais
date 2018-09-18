@@ -35,6 +35,7 @@ class TicketDetailController extends Controller
 
         $em = $this->getDoctrine();
 
+        $ticketDetails = [];
         if(!empty($shoppingCart->getCarrito())){
 
             $idTicket = $request->get('id');
@@ -43,7 +44,6 @@ class TicketDetailController extends Controller
             //Guardar el ticket
             $em = $this->getDoctrine()->getManager();
 
-            $ticketDetails = [];
             foreach ($shoppingCart->getCarrito() as $line){
                 $ticketDetail = new Ticket_detail();
                 $ticketDetail->setIdTicket($ticket);
@@ -54,8 +54,10 @@ class TicketDetailController extends Controller
                 $em->persist($ticketDetail);
                 $em->flush();
 
-                $ticketDetails[] = $ticketDetail;
+                $ticketDetails[] = $ticketDetail->getId();
             }
+
+            $shoppingCart->resetCart();
 
         }
 

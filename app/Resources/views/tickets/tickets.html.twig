@@ -1,0 +1,39 @@
+{% extends 'sidebar.html.twig' %}
+
+{% block content %}
+    <h1>Lista de Tickets</h1>
+
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Empleado</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Fecha de venta</th>
+            <th scope="col" colspan="2">Ver detalles</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in tickets %}
+            <tr>
+                <th>{{ t.id }}</th>
+                <td>{{ t.getIdUser().getUserName()  }}</td>
+                <td>{{ t.getIdClient() is not empty ? t.getIdClient().getName() : 'Sin cliente asociado' }}</td>
+                <td>{{ t.getDateSale()|date('d/m/Y') }}</td>
+                <td colspan="2">
+                    <a href="#" class="btn btn-dark" title="Ver detalles del ticket">
+                        <i class="fas fa-info-circle fa-2x"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{#
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/confirm.js') }}"></script>
+{% endblock %}#}

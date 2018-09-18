@@ -30,9 +30,7 @@ $(document).ready(function () {
     //cancelar venta (resetear el carrito)
     $('#reset_ticket').on('click', function () {
         manageCart(null, null, 'reset');
-        $('#table_sale').find('tbody').children().remove();
-        $('.total_cant_articles').text(0);
-        $('.total_price_articles').text('0.00 €');
+        resetTable();
     });
 
     //Facturar la compra
@@ -276,6 +274,7 @@ function checkIn(){
 }
 
 function saveDetails(idTicket){
+    $('.spinner').removeClass('d-none');
     $.ajax({
         url: $('input[name="path_save_details"]').val(),
         data: {
@@ -287,13 +286,23 @@ function saveDetails(idTicket){
             if(data.length > 0){
                 alert('se han guardado ' + data.length + ' detalles');
             }
+            resetTable();
         },
-        error: function (xhr, status) {
+        error: function (request, status, error) {
             swal({
                 title: "Error",
-                text: status,
+                text: request.responseText,
                 icon: "error",
             });
+        },
+        complete: function(data){
+            $('.spinner').addClass('d-none');
         }
     });
+}
+
+function resetTable(){
+    $('#table_sale').find('tbody').children().remove();
+    $('.total_cant_articles').text(0);
+    $('.total_price_articles').text('0.00 €');
 }

@@ -24,18 +24,43 @@ class TicketController extends Controller
 {
 
     /**
+     * @Route("/tickets/{page}", defaults={"page"="1"}, name="tickets")
+     */
+    public function index($page)
+    {
+        $tickets = $this->getDoctrine()->getRepository(Ticket::class)->findAll();
+
+        $repo = $this->getDoctrine()->getRepository(Ticket::class);
+        $rows = $repo->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+        $params = [
+            'tickets' => $tickets
+        ];
+
+        return $this->render('tickets/tickets.html.twig', $params);
+
+    }
+
+    /**
      * @Route("/check_in", name="check_in")
      */
-    public function checkIn(){
+    public function checkIn()
+    {
 
         $common = new CommonService();
         $shoppingCart = $common->shoppingCart($this->get('session'));
 
         $ticket = new Ticket();
-        if(!empty($shoppingCart->getCarrito())){
+        if (!empty($shoppingCart->getCarrito())) {
 
             //Guardar el ticket
             $em = $this->getDoctrine()->getManager();
+
+            $ticket->setIdUser($this->getUser());
             $date = new \DateTime();
             $ticket->setDateSale($date->getTimestamp());
 
