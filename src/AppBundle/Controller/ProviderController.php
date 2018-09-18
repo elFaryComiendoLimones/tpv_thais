@@ -13,21 +13,38 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Provider;
 use AppBundle\Form\ProviderType;
+use AppBundle\Utils\Pagination;
 
 
 class ProviderController extends Controller
 {
 
     /**
-     * @Route("/providers", name="providers")
+     * @Route("/providers/{page}",defaults={"page"="1"}, name="providers")
      */
-    public function listProviders()
+    public function listProviders($page)
     {
-        $providerManager = $this->getDoctrine()->getRepository(Provider::class);
+        $repo = $this->getDoctrine()->getRepository(Provider::class);
+        $rows = $repo->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $providers = $providerManager->findByActive(1);
+        $limit = 10;
+        $pagination = new Pagination($rows, $page, $limit);
 
-        $params = array('providers' => $providers);
+        $providers = $repo->findByActive(1,null,$limit, $pagination->getOffset());
+
+
+        $params = [
+            'providers' => $providers,
+            'pagination' => [
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'range' => $pagination->getRange(),
+                'actual' => $pagination->getActual()
+            ]
+        ];
 
         return $this->render('provider/providers.html.twig', $params);
     }

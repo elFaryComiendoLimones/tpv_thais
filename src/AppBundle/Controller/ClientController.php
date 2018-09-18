@@ -18,22 +18,38 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use AppBundle\Utils\Pagination;
 
 class ClientController extends Controller
 {
 
     /**
-     * @Route("/clients", name="clients")
+     * @Route("/clients{page}", defaults={"page"="1"}, name="clients")
      */
-    public function indexAction()
+    public function indexAction($page)
     {
 
-        $clientManager = $this->getDoctrine()->getRepository(Client::class);
-        $clients = $clientManager->findByActive(1);
+        $repo = $this->getDoctrine()->getRepository(Client::class);
+        $rows = $repo->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $params = array(
-            'clients' => $clients
-        );
+        $limit = 10;
+        $pagination = new Pagination($rows, $page, $limit);
+
+        $clients = $repo->findByActive(1,null,$limit, $pagination->getOffset());
+
+
+        $params = [
+            'clients' => $clients,
+            'pagination' => [
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'range' => $pagination->getRange(),
+                'actual' => $pagination->getActual()
+            ]
+        ];
 
         return $this->render('client/clients.html.twig', $params);
     }

@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Ticket;
+use AppBundle\Utils\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,6 @@ class TicketController extends Controller
      */
     public function index($page)
     {
-        $tickets = $this->getDoctrine()->getRepository(Ticket::class)->findAll();
 
         $repo = $this->getDoctrine()->getRepository(Ticket::class);
         $rows = $repo->createQueryBuilder('t')
@@ -36,9 +36,20 @@ class TicketController extends Controller
             ->getQuery()
             ->getSingleScalarResult();
 
+        $limit = 10;
+        $pagination = new Pagination($rows, $page, $limit);
+
+        $tickets = $repo->findBy([],['date_sale' => 'DESC'],$limit, $pagination->getOffset());
+
 
         $params = [
-            'tickets' => $tickets
+            'tickets' => $tickets,
+            'pagination' => [
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'range' => $pagination->getRange(),
+                'actual' => $pagination->getActual()
+            ]
         ];
 
         return $this->render('tickets/tickets.html.twig', $params);

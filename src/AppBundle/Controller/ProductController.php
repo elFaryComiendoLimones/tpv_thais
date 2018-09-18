@@ -13,22 +13,38 @@ use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Product;
 use AppBundle\Form\ProductType;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Utils\Pagination;
 
 class ProductController extends Controller
 {
 
     /**
-     * @Route("/products", name="products")
+     * @Route("/products/{page}", defaults={"page"="1"}, name="products")
      */
-    public function indexAction()
+    public function indexAction($page)
     {
 
-        $productManager = $this->getDoctrine()->getRepository(Product::class);
-        $products = $productManager->findByActive(1);
+        $repo = $this->getDoctrine()->getRepository(Product::class);
+        $rows = $repo->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $params = array(
-            'products' => $products
-        );
+        $limit = 10;
+        $pagination = new Pagination($rows, $page, $limit);
+
+        $products = $repo->findByActive(1,null,$limit, $pagination->getOffset());
+
+
+        $params = [
+            'products' => $products,
+            'pagination' => [
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'range' => $pagination->getRange(),
+                'actual' => $pagination->getActual()
+            ]
+        ];
 
         return $this->render('products/products.html.twig', $params);
     }

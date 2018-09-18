@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use AppBundle\Utils\Filter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use AppBundle\Utils\Pagination;
 
 
 class EmployeeController extends Controller
@@ -25,15 +26,30 @@ class EmployeeController extends Controller
     }
 
     /**
-     * @Route("/employees", name="employees")
+     * @Route("/employees/{page}", defaults={"page"="1"}, name="employees")
      */
-    public function listUsers()
+    public function listUsers($page)
     {
-        $userManager = $this->getDoctrine()->getRepository(User::class);
+        $repo = $this->getDoctrine()->getRepository(User::class);
+        $rows = $repo->createQueryBuilder('u')
+            ->select('count(u.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $users = $userManager->findByEnabled(1);
+        $limit = 10;
+        $pagination = new Pagination($rows, $page, $limit);
 
-        $params = array('users' => $users);
+        $users = $repo->findByEnabled(1,null,$limit, $pagination->getOffset());
+
+        $params = [
+            'users' => $users,
+            'pagination' => [
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'range' => $pagination->getRange(),
+                'actual' => $pagination->getActual()
+            ]
+        ];
 
         return $this->render('employee/employee.html.twig', $params);
     }
