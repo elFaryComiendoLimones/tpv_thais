@@ -49,12 +49,17 @@ class TPVController extends Controller
     /**
      * @Route("/get-data-products", name="get-data-products")
      */
-    public function getData(Request $request)
+    public function getDataProducts(Request $request)
     {
 
         $em = $this->getDoctrine();
         /*Obtener el numero total de filas de la tabla*/
-        $rows = count($em->getRepository(Product::class)->findByActive(1));
+        //$rows = count($em->getRepository(Product::class)->findByActive(1));
+        $repo = $this->getDoctrine()->getRepository(Product::class);
+        $rows = $repo->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
         $page = !empty($request->get('page')) ? $request->get('page') : 1;
         $limit = 16;
@@ -64,6 +69,59 @@ class TPVController extends Controller
 
         $data = [
             'products' => $products,
+            'pagination' => [
+                'visible' => true,
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'actual' => $pagination->getActual()
+            ]
+        ];
+
+        if ($rows < $limit) {
+            $data['pagination']['visible'] = false;
+        }
+
+        $encoder = new JsonEncoder();
+
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array(
+            'typeCode', 'type', 'range',
+            'useCaseCode', 'useCase', 'updatedAt', 'updatedBy'));
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getName();
+        });
+        $serializer = new Serializer(array($normalizer), array($encoder));
+
+        $response = $serializer->serialize($data, 'json');
+
+        $jsonResponse = new JsonResponse();
+
+        return $jsonResponse::fromJsonString($response);
+    }
+
+    /**
+     * @Route("/get-data-treatments", name="get-data-treatments")
+     */
+    public function getDataTreatments(Request $request)
+    {
+
+        $em = $this->getDoctrine();
+        /*Obtener el numero total de filas de la tabla*/
+        /*$rows = count($em->getRepository(Treatment::class)->findByActive(1));*/
+        $repo = $this->getDoctrine()->getRepository(Treatment::class);
+        $rows = $repo->createQueryBuilder('tr')
+            ->select('count(tr.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $page = !empty($request->get('page')) ? $request->get('page') : 1;
+        $limit = 16;
+        $pagination = new Pagination($rows, $page, $limit);
+
+        $treatments = $em->getRepository(Treatments::class)->findByActive(1, null, $limit, $pagination->getOffset());
+
+        $data = [
+            'treatments' => $treatments,
             'pagination' => [
                 'visible' => true,
                 'next' => $pagination->getNext(),

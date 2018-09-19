@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {#<h1>Estás loggeado {{ user.username }}</h1>#}
     <div class="wrapper">
         <!-- Mensaje de carga general -->
         <div class="spinner d-none">
@@ -39,7 +38,7 @@
                             <a href="{{ path('products') }}">Productos</a>
                         </li>
                         <li>
-                            <a href="#">Tratamientos</a>
+                            <a href="{{ path('treatments') }}">Tratamientos</a>
                         </li>
                     </ul>
                 </li>

@@ -45,7 +45,7 @@ class Product
     private $name;
 
     /**
-     * @ORM\Column(type="integer", length=200)
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      */
     private $price;
 
