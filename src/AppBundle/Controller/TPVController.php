@@ -167,9 +167,9 @@ class TPVController extends Controller
         $common = new CommonService();
         $shoppingCart = $common->shoppingCart($this->get('session'));
 
-        if ($type = 'product') {
+        if ($type == 'product') {
             $product = $em->getRepository(Product::class)->find($id);
-        } elseif ($type = 'treatment') {
+        } elseif ($type == 'treatment') {
             $product = $em->getRepository(Treatment::class)->find($id);
         }
         $shoppingCart->setType($type);

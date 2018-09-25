@@ -1,7 +1,15 @@
 var path_assets = $('input[name="path_assets"]').val();
 $(document).ready(function () {
 
-    paginateProducts('list');
+    if($('input[name="type_ticket"]').val() == 'product'){
+        paginateProducts('list');
+        $('#load_products').removeClass('active');
+        $('#load_treatments').addClass('active');
+    }else{
+        paginateTreatments('list');
+        $('#load_products').removeClass('active');
+        $('#load_treatments').addClass('active');
+    }
 
     /*Vista de productos y tratamientos vista cuadricula y lista*/
     $('#bt-list').on('click', function () {
@@ -10,7 +18,11 @@ $(document).ready(function () {
         $('#grid-view').addClass('d-none');
         $('#list-view').removeClass('d-none');
 
-        paginateProducts('list');
+        if($('input[name="type_ticket"]').val() == 'product'){
+            paginateProducts('list');
+        }else{
+            paginateTreatments('list');
+        }
 
     });
 
@@ -20,7 +32,11 @@ $(document).ready(function () {
         $('#list-view').addClass('d-none');
         $('#grid-view').removeClass('d-none');
 
-        paginateProducts('grid');
+        if($('input[name="type_ticket"]').val() == 'product'){
+            paginateProducts('grid');
+        }else{
+            paginateTreatments('grid');
+        }
 
     });
 
@@ -79,6 +95,11 @@ $(document).ready(function () {
                 }
             });
     });
+
+
+    $('#table_sale').find('tbody').find('tr').find('.sum').on('click', sum);
+    $('#table_sale').find('tbody').find('tr').find('.minus').on('click', minus);
+    $('#table_sale').find('tbody').find('tr').find('.rm').on('click', removeRow);
 
 });
 

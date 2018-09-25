@@ -36,7 +36,7 @@ class TicketController extends Controller
             ->getQuery()
             ->getSingleScalarResult();
 
-        $limit = 10;
+        $limit = 7;
         $pagination = new Pagination($rows, $page, $limit);
 
         $tickets = $repo->findBy([],['date_sale' => 'DESC'],$limit, $pagination->getOffset());

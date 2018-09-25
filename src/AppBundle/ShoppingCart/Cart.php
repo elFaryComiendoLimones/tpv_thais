@@ -10,6 +10,7 @@ class Cart {
     private $type;
     
     function __construct() {
+        $this->type = 'product';
     }
     
     /**

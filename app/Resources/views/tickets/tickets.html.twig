@@ -19,67 +19,92 @@
         {% for t in tickets %}
             <tr>
                 <th>{{ t.id }}</th>
-                <td>{{ t.getIdUser().getUserName()  }}</td>
+                <td>{{ t.getIdUser().getUserName() }}</td>
                 <td>{{ t.getIdClient() is not empty ? t.getIdClient().getName() : 'Sin cliente asociado' }}</td>
                 <td>{{ t.getDateSale()|date('d/m/Y') }}</td>
                 <td colspan="2">
-                    <a href="#" class="btn btn-dark view_details" title="Ver detalles del ticket" data-id_ticket="{{ t.id }}" data-toggle="modal" data-target="dataTicket{{ t.id }}">
+                    <a href="#" class="btn btn-dark view_details" title="Ver detalles del ticket"
+                       data-id_ticket="{{ t.id }}" data-toggle="modal" data-target="#dataTicket{{ t.id }}">
                         <i class="fas fa-info-circle"></i>
                     </a>
                 </td>
-                <!-- Modal -->
-                <div class="modal fade" id="dataTicket{{ t.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Datos del Ticket</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                dataTicket{{ t.id }}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="swal-button swal-button--confirm" data-dismiss="modal">Cerrar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
+    <!-- Modals -->
+    {% for t in tickets %}
+        <div class="modal fade" id="dataTicket{{ t.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Datos del Ticket</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Producto/Tratamiento</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Precio</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for detail in t.getTicketDetails() %}
+                                <tr>
+                                    {% if detail.getIdProduct() is not null %}
+                                        <td>{{ detail.getIdProduct().name }}</td>
+                                    {% else %}
+                                        <td>{{ detail.getIdTreatment().name }}</td>
+                                    {% endif %}
+                                    <td>{{  detail.getQuantity() }}</td>
+                                    <td>{{  detail.getPrice() }} €</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="swal-button swal-button--confirm" data-dismiss="modal">Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
     {% if pagination.range|length > 1 %}
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="{{ path('tickets', {'page' : pagination.previous}) }}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            {% for pag in pagination.range %}
-                {% if pagination.actual == pag %}
-                        <li class="page-item active"><a class="page-link" href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="{{ path('tickets', {'page' : pagination.previous}) }}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {% for pag in pagination.range %}
+                    {% if pagination.actual == pag %}
+                        <li class="page-item active"><a class="page-link"
+                                                        href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
                     {% else %}
-                        <li class="page-item"><a class="page-link" href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
-                {% endif %}
-            {% endfor %}
-            <li class="page-item">
-                <a class="page-link" href="{{ path('tickets', {'page' : pagination.next}) }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path('tickets', {'page' : pagination.next}) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     {% endif %}
 
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('assets/js/ticket.js') }}"></script>
-{% endblock %}

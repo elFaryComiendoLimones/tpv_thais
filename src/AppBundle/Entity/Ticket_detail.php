@@ -53,7 +53,7 @@ class Ticket_detail
     private $quantity;
 
     /**
-     * @ORM\Column(type="integer", length=200)
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      */
     private $price;
 
@@ -96,6 +96,24 @@ class Ticket_detail
     {
         return $this->id_product;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIdTreatment()
+    {
+        return $this->id_treatment;
+    }
+
+    /**
+     * @param mixed $id_treatment
+     */
+    public function setIdTreatment($id_treatment)
+    {
+        $this->id_treatment = $id_treatment;
+    }
+
+
 
     /**
      * @param mixed $id_product
