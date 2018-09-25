@@ -42,6 +42,12 @@ class Ticket_detail
     private $id_product;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Treatment")
+     * @ORM\JoinColumn(name="id_treatment", referencedColumnName="id")
+     */
+    private $id_treatment;
+
+    /**
      * @ORM\Column(type="integer", length=200)
      */
     private $quantity;

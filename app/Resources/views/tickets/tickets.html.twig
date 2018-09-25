@@ -1,6 +1,8 @@
 {% extends 'sidebar.html.twig' %}
 
 {% block content %}
+    <input type="hidden" name="path_view_info_ticket" value="{{ path('get_details') }}">
+
     <h1>Lista de Tickets</h1>
 
     <table class="table">
@@ -21,10 +23,29 @@
                 <td>{{ t.getIdClient() is not empty ? t.getIdClient().getName() : 'Sin cliente asociado' }}</td>
                 <td>{{ t.getDateSale()|date('d/m/Y') }}</td>
                 <td colspan="2">
-                    <a href="#" class="btn btn-dark" title="Ver detalles del ticket">
+                    <a href="#" class="btn btn-dark view_details" title="Ver detalles del ticket" data-id_ticket="{{ t.id }}" data-toggle="modal" data-target="dataTicket{{ t.id }}">
                         <i class="fas fa-info-circle"></i>
                     </a>
                 </td>
+                <!-- Modal -->
+                <div class="modal fade" id="dataTicket{{ t.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Datos del Ticket</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                dataTicket{{ t.id }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="swal-button swal-button--confirm" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </tr>
         {% endfor %}
         </tbody>
@@ -58,8 +79,7 @@
 
 {% endblock %}
 
-{#
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('assets/js/confirm.js') }}"></script>
-{% endblock %}#}
+    <script src="{{ asset('assets/js/ticket.js') }}"></script>
+{% endblock %}

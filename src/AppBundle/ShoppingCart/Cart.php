@@ -6,9 +6,10 @@ use AppBundle\ShoppingCart\Line;
 class Cart {
 
     private $carrito = [];
+    //Si guarda productos o tratamientos
+    private $type;
     
     function __construct() {
-        
     }
     
     /**
@@ -85,5 +86,18 @@ class Cart {
     function resetCart(){
         $this->carrito = [];
     }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+
     
 }

@@ -30,16 +30,18 @@ class TPVController extends Controller
      */
     public function index(CommonService $common)
     {
-        //$shoppingCart = $this->shoppingCart();
         $shoppingCart = $common->shoppingCart($this->get('session'));
 
         $totalPrice = 0.00;
-        foreach ($shoppingCart->getCarrito() as $line){
-            $totalPrice = number_format($totalPrice + $line['cantidad'] * $line['item']->getPrice(), 2, '.', ',');
+        if (!empty($shoppingCart->getCarrito())) {
+            foreach ($shoppingCart->getCarrito() as $line) {
+                $totalPrice = number_format($totalPrice + $line['cantidad'] * $line['item']->getPrice(), 2, '.', ',');
+            }
         }
 
         $params = [
             'shoppingCart' => $shoppingCart->getCarrito(),
+            'shoppingCartType' => $shoppingCart->getType(),
             'totalPrice' => number_format($totalPrice, 2, '.', ',') . ' €',
             'cant' => count($shoppingCart->getCarrito())
         ];
@@ -159,13 +161,19 @@ class TPVController extends Controller
     {
         $id = $request->get('id');
         $action = $request->get('action');
-        $is_product = $request->get('is_product');
+        $type = $request->get('type');
 
         $em = $this->getDoctrine();
-        $product = $em->getRepository(Product::class)->find($id);
-
         $common = new CommonService();
         $shoppingCart = $common->shoppingCart($this->get('session'));
+
+        if ($type = 'product') {
+            $product = $em->getRepository(Product::class)->find($id);
+        } elseif ($type = 'treatment') {
+            $product = $em->getRepository(Treatment::class)->find($id);
+        }
+        $shoppingCart->setType($type);
+
         switch ($action) {
             case 'sum':
                 $cant = $request->get('cant');
@@ -183,7 +191,9 @@ class TPVController extends Controller
         }
 
         $lines = [];
-        foreach ($shoppingCart->getCarrito() as $line){
+        $lines['type'] = $shoppingCart->getType();
+        $lines['type'] = $type;
+        foreach ($shoppingCart->getCarrito() as $line) {
             $lines[] = ['id' => $line['id'], 'cant' => $line['cantidad']];
         }
 

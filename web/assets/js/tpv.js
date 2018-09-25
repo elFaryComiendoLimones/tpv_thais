@@ -29,7 +29,7 @@ $(document).ready(function () {
 
     //cancelar venta (resetear el carrito)
     $('#reset_ticket').on('click', function () {
-        manageCart(null, null, 'reset');
+        manageCart(null, null, 'reset', null);
         resetTable();
     });
 
@@ -38,7 +38,8 @@ $(document).ready(function () {
 
 
     //Ver productos (limpia carro)
-    $('#load_products').on('click', function () {
+    $('#load_products').on('click', function (e) {
+        e.preventDefault();
         swal({
             title: "Cambiar a productos",
             text: "Si cambias a modo producto el carro se reseteará",
@@ -50,14 +51,16 @@ $(document).ready(function () {
                 if (confirm) {
                     $('#load_products').addClass('active');
                     $('#load_treatments').removeClass('active');
-                    manageCart(null, null, 'reset');
+                    manageCart(null, null, 'reset', 'product');
                     resetTable();
                     paginateProducts();
+                    $('input[name="type_ticket"]').val('product');
                 }
             });
     });
     //Ver tratamientos (limpia carro)
-    $('#load_treatments').on('click', function () {
+    $('#load_treatments').on('click', function (e) {
+        e.preventDefault();
         swal({
             title: "Cambiar a tratamientos",
             text: "Si cambias a modo tratamiento el carro se reseteará",
@@ -69,9 +72,10 @@ $(document).ready(function () {
                 if (confirm) {
                     $('#load_products').removeClass('active');
                     $('#load_treatments').addClass('active');
-                    manageCart(null, null, 'reset');
+                    manageCart(null, null, 'reset', 'treatment');
                     resetTable();
                     paginateTreatments();
+                    $('input[name="type_ticket"]').val('treatment');
                 }
             });
     });
@@ -250,7 +254,7 @@ function tpv() {
     $('#table_total').find('.total_price_articles').text(parseFloat(totalPriceArticles).toFixed(2) + ' €');
 
     //añadir línea al carrito
-    manageCart(idProduct, cant, 'sum');
+    manageCart(idProduct, cant, 'sum', $('input[name="type_ticket"]').val());
 }
 
 function sum() {
@@ -263,7 +267,7 @@ function sum() {
     tr.find('.td_total_price').text(totalPrice);
 
     //sumar al carrito
-    manageCart(tr.data('id_product'), null, 'sum');
+    manageCart(tr.data('id_product'), cant, 'sum', $('input[name="type_ticket"]').val());
 }
 
 function minus() {
@@ -277,20 +281,20 @@ function minus() {
         tr.find('.td_total_price').text(totalPrice);
 
         //restar cantidad al carrito
-        manageCart(tr.data('id_product'), cant, 'minus');
+        manageCart(tr.data('id_product'), cant, 'minus', $('input[name="type_ticket"]').val());
     }
 }
 
 function removeRow() {
     tr = $(this).closest('tr');
 
-    manageCart(tr.data('id_product'), null, 'del');
+    manageCart(tr.data('id_product'), null, 'del', $('input[name="type_ticket"]').val());
 
     tr.remove();
 }
 
 /*Funciones del carrito*/
-function manageCart(id, cant, action) {
+function manageCart(id, cant, action, type) {
     $.ajax({
         url: $('input[name="path_manage_shopping_cart"]').val(),
         data: {
@@ -298,6 +302,7 @@ function manageCart(id, cant, action) {
             id: id,
             //cantidad
             cant: cant,
+            type: type,
             action: action
         },
         type: 'POST',

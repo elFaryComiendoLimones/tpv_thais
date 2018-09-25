@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Ticket_detail;
 use AppBundle\Entity\Ticket;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Treatment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,8 +48,14 @@ class TicketDetailController extends Controller
             foreach ($shoppingCart->getCarrito() as $line){
                 $ticketDetail = new Ticket_detail();
                 $ticketDetail->setIdTicket($ticket);
-                $product = $em->getRepository(Product::class)->find($line['item']->getId());
-                $ticketDetail->setIdProduct($product);
+                if($shoppingCart->getType() == 'product'){
+                    $product = $em->getRepository(Product::class)->find($line['item']->getId());
+                    $ticketDetail->setIdProduct($product);
+                }elseif ($shoppingCart->getType() == 'treatment'){
+                    $product = $em->getRepository(Treatment::class)->find($line['item']->getId());
+                    $ticketDetail->setIdTreatment($product);
+                }
+
                 $ticketDetail->setQuantity($line['cantidad']);
                 $ticketDetail->setPrice(number_format($line['cantidad'] * $line['item']->getPrice(), 2, '.', ','));
                 $em->persist($ticketDetail);
@@ -75,6 +82,33 @@ class TicketDetailController extends Controller
 
         $jsonResponse = new JsonResponse();
         return $jsonResponse::fromJsonString($response);
+    }
+
+    /**
+     * @Route("/get_details", name="get_details")
+     */
+    public function getDetails(Request $request){
+
+        $id = $request->get('id_product');
+
+        $em = $this->getDoctrine();
+        $ticket_detail = $em->getRepository(Ticket_detail::class)->findByIdTicket($id);
+
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array(
+            'typeCode', 'type', 'range',
+            'useCaseCode', 'useCase', 'updatedAt', 'updatedBy'));
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $serializer = new Serializer(array($normalizer), array($encoder));
+
+        $response = $serializer->serialize($ticket_detail, 'json');
+
+        $jsonResponse = new JsonResponse();
+        return $jsonResponse::fromJsonString($response);
+
     }
 
 }
