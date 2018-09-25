@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Treatment;
 use AppBundle\Utils\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -107,7 +108,6 @@ class TPVController extends Controller
 
         $em = $this->getDoctrine();
         /*Obtener el numero total de filas de la tabla*/
-        /*$rows = count($em->getRepository(Treatment::class)->findByActive(1));*/
         $repo = $this->getDoctrine()->getRepository(Treatment::class);
         $rows = $repo->createQueryBuilder('tr')
             ->select('count(tr.id)')
@@ -118,7 +118,7 @@ class TPVController extends Controller
         $limit = 16;
         $pagination = new Pagination($rows, $page, $limit);
 
-        $treatments = $em->getRepository(Treatments::class)->findByActive(1, null, $limit, $pagination->getOffset());
+        $treatments = $em->getRepository(Treatment::class)->findByActive(1, null, $limit, $pagination->getOffset());
 
         $data = [
             'treatments' => $treatments,
@@ -159,11 +159,11 @@ class TPVController extends Controller
     {
         $id = $request->get('id');
         $action = $request->get('action');
+        $is_product = $request->get('is_product');
 
         $em = $this->getDoctrine();
         $product = $em->getRepository(Product::class)->find($id);
 
-        //$shoppingCart = $this->shoppingCart();
         $common = new CommonService();
         $shoppingCart = $common->shoppingCart($this->get('session'));
         switch ($action) {

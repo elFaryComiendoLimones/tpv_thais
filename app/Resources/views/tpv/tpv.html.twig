@@ -56,10 +56,10 @@
                     <div class="col-12">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#">Productos</a>
+                                <a class="nav-link active" id="load_products" href="#">Productos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Tratamientos</a>
+                                <a class="nav-link" id="load_treatments" href="#">Tratamientos</a>
                             </li>
                             <li class="ml-auto">
                                 <button id="bt-list" type="button" class="btn btn-dark active">
@@ -86,7 +86,7 @@
                     {# Se carga por javascript la lista de productos #}
                 </div>
                 <div class="row">
-                    <div id="pagination-products" class="col-12 mt-2" data-path="{{ path('get-data-products') }}">
+                    <div id="pagination-products" class="col-12 mt-2" data-path="{{ path('get-data-products') }}" data-path_treatments="{{ path('get-data-treatments') }}">
                         {# Se carga por javascript la paginación #}
                     </div>
                 </div>
