@@ -7,7 +7,7 @@
     <input type="hidden" name="path_check_in" value="{{ path('check_in') }}">
     <input type="hidden" name="path_save_details" value="{{ path('save_details') }}">
 
-    <input type="hidden" name="type_ticket" value="{{ shoppingCartType }}">
+    <input type="hidden" name="type_ticket" value="product">
 
     <div class="container">
         <div class="row">
@@ -25,18 +25,21 @@
                         </thead>
                         <tbody>
                         {% if shoppingCart is not empty %}
-                            {% for data in shoppingCart %}
-                                <tr data-id_product="{{ data.item.id }}">
-                                    <td class="td_name" title="{{ data.item.name }}"><span>{{ data.item.name }}</span></td>
-                                    <td class="td_cant">{{ data.cantidad }}</td>
-                                    <td class="td_price">{{ data.item.price|number_format(2, '.', ',') }}</td>
-                                    <td class="td_total_price">{{ (data.item.price * data.cantidad)|number_format(2, '.', ',') }}</td>
-                                    <td>
-                                        <button class="sum action"><i class="fas fa-plus-square"></i></button>
-                                        <button class="minus action"><i class="fas fa-minus-square"></i></button>
-                                        <button class="rm action"><i class="fas fa-window-close"></i></button>
-                                    </td>
-                                </tr>
+                            {% for key,type in shoppingCart %}
+                                {% for data in type %}
+                                    <tr data-type="{{ key }}" data-id_product="{{ data.item.id }}">
+                                        <td class="td_name" title="{{ data.item.name }}">
+                                            <span>{{ data.item.name }}</span></td>
+                                        <td class="td_cant">{{ data.cantidad }}</td>
+                                        <td class="td_price">{{ data.item.price|number_format(2, '.', ',') }}</td>
+                                        <td class="td_total_price">{{ (data.item.price * data.cantidad)|number_format(2, '.', ',') }}</td>
+                                        <td>
+                                            <button class="sum action"><i class="fas fa-plus-square"></i></button>
+                                            <button class="minus action"><i class="fas fa-minus-square"></i></button>
+                                            <button class="rm action"><i class="fas fa-window-close"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
                             {% endfor %}
                         {% endif %}
                         </tbody>
@@ -47,7 +50,7 @@
                         <td>Total artículos</td>
                         <td class="total_cant_articles">{{ cant }}</td>
                         <td></td>
-                        <td class="total_price_articles">{{ totalPrice }}</td>
+                        <td class="total_price_articles">{{ totalPrice|number_format(2, '.', ',') }} €</td>
                     </tr>
                 </table>
                 <button id="reset_ticket" type="button" class="btn btn-danger">Cancelar</button>
@@ -88,7 +91,8 @@
                     {# Se carga por javascript la lista de productos #}
                 </div>
                 <div class="row">
-                    <div id="pagination-products" class="col-12 mt-2" data-path="{{ path('get-data-products') }}" data-path_treatments="{{ path('get-data-treatments') }}">
+                    <div id="pagination-products" class="col-12 mt-2" data-path="{{ path('get-data-products') }}"
+                         data-path_treatments="{{ path('get-data-treatments') }}">
                         {# Se carga por javascript la paginación #}
                     </div>
                 </div>

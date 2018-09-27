@@ -29,7 +29,7 @@ class TicketDetailController extends Controller
     /**
      * @Route("/save_details", name="save_details")
      */
-    public function checkIn(Request $request){
+    public function saveDetails(Request $request){
 
         $common = new CommonService();
         $shoppingCart = $common->shoppingCart($this->get('session'));
@@ -45,23 +45,23 @@ class TicketDetailController extends Controller
             //Guardar el ticket
             $em = $this->getDoctrine()->getManager();
 
-            foreach ($shoppingCart->getCarrito() as $line){
-                $ticketDetail = new Ticket_detail();
-                $ticketDetail->setIdTicket($ticket);
-                if($shoppingCart->getType() == 'product'){
-                    $product = $em->getRepository(Product::class)->find($line['item']->getId());
-                    $ticketDetail->setIdProduct($product);
-                }elseif ($shoppingCart->getType() == 'treatment'){
-                    $product = $em->getRepository(Treatment::class)->find($line['item']->getId());
-                    $ticketDetail->setIdTreatment($product);
+            foreach ($shoppingCart->getCarrito() as $key => $type){
+                foreach ($type as $line){
+                    $ticketDetail = new Ticket_detail();
+                    $ticketDetail->setIdTicket($ticket);
+                    if($key == 'product'){
+                        $item = $em->getRepository(Product::class)->find($line['item']->getId());
+                        $ticketDetail->setIdProduct($item);
+                    }elseif ($key == 'treatment'){
+                        $item = $em->getRepository(Treatment::class)->find($line['item']->getId());
+                        $ticketDetail->setIdTreatment($item);
+                    }
+                    $ticketDetail->setQuantity($line['cantidad']);
+                    $ticketDetail->setPrice(number_format($line['cantidad'] * $line['item']->getPrice(), 2, '.', ','));
+                    $em->persist($ticketDetail);
+                    $em->flush();
+                    $ticketDetails[] = $ticketDetail->getId();
                 }
-
-                $ticketDetail->setQuantity($line['cantidad']);
-                $ticketDetail->setPrice(number_format($line['cantidad'] * $line['item']->getPrice(), 2, '.', ','));
-                $em->persist($ticketDetail);
-                $em->flush();
-
-                $ticketDetails[] = $ticketDetail->getId();
             }
 
             $shoppingCart->resetCart();

@@ -1,11 +1,11 @@
 var path_assets = $('input[name="path_assets"]').val();
 $(document).ready(function () {
 
-    if($('input[name="type_ticket"]').val() == 'product'){
+    if ($('input[name="type_ticket"]').val() == 'product') {
         paginateProducts('list');
-        $('#load_products').removeClass('active');
-        $('#load_treatments').addClass('active');
-    }else{
+        $('#load_products').addClass('active');
+        $('#load_treatments').removeClass('active');
+    } else {
         paginateTreatments('list');
         $('#load_products').removeClass('active');
         $('#load_treatments').addClass('active');
@@ -18,9 +18,9 @@ $(document).ready(function () {
         $('#grid-view').addClass('d-none');
         $('#list-view').removeClass('d-none');
 
-        if($('input[name="type_ticket"]').val() == 'product'){
+        if ($('input[name="type_ticket"]').val() == 'product') {
             paginateProducts('list');
-        }else{
+        } else {
             paginateTreatments('list');
         }
 
@@ -32,9 +32,9 @@ $(document).ready(function () {
         $('#list-view').addClass('d-none');
         $('#grid-view').removeClass('d-none');
 
-        if($('input[name="type_ticket"]').val() == 'product'){
+        if ($('input[name="type_ticket"]').val() == 'product') {
             paginateProducts('grid');
-        }else{
+        } else {
             paginateTreatments('grid');
         }
 
@@ -56,44 +56,18 @@ $(document).ready(function () {
     //Ver productos (limpia carro)
     $('#load_products').on('click', function (e) {
         e.preventDefault();
-        swal({
-            title: "Cambiar a productos",
-            text: "Si cambias a modo producto el carro se reseteará",
-            icon: "warning",
-            buttons: ["Cancelar", "Aceptar"],
-            dangerMode: true,
-        })
-            .then((confirm) => {
-                if (confirm) {
-                    $('#load_products').addClass('active');
-                    $('#load_treatments').removeClass('active');
-                    manageCart(null, null, 'reset', 'product');
-                    resetTable();
-                    paginateProducts();
-                    $('input[name="type_ticket"]').val('product');
-                }
-            });
+        $('#load_products').addClass('active');
+        $('#load_treatments').removeClass('active');
+        paginateProducts();
+        $('input[name="type_ticket"]').val('product');
     });
     //Ver tratamientos (limpia carro)
     $('#load_treatments').on('click', function (e) {
         e.preventDefault();
-        swal({
-            title: "Cambiar a tratamientos",
-            text: "Si cambias a modo tratamiento el carro se reseteará",
-            icon: "warning",
-            buttons: ["Cancelar", "Aceptar"],
-            dangerMode: true,
-        })
-            .then((confirm) => {
-                if (confirm) {
-                    $('#load_products').removeClass('active');
-                    $('#load_treatments').addClass('active');
-                    manageCart(null, null, 'reset', 'treatment');
-                    resetTable();
-                    paginateTreatments();
-                    $('input[name="type_ticket"]').val('treatment');
-                }
-            });
+        $('#load_products').removeClass('active');
+        $('#load_treatments').addClass('active');
+        paginateTreatments();
+        $('input[name="type_ticket"]').val('treatment');
     });
 
 
@@ -216,11 +190,12 @@ function tpv() {
     var idProduct = product.data('id');
     var productName = product.text();
     var price = parseFloat(product.data('price')).toFixed(2);
+    var type = $('input[name="type_ticket"]').val();
 
     //Comprobar si el producto ya se había insertado en la tabla
     var exists = false;
     $.each(table.find('tbody').find('tr'), function () {
-        if ($(this).data('id_product') == idProduct) {
+        if (($(this).data('id_product') == idProduct) && ($(this).data('type') == type)) {
             exists = true;
             return false;
         }
@@ -236,7 +211,7 @@ function tpv() {
         cant = 1;
         totalPrice = price;
 
-        tr = $('<tr data-id_product="' + idProduct + '">' +
+        tr = $('<tr data-type="' + type + '" data-id_product="' + idProduct + '">' +
             '<td class="td_name" title="' + productName + '"><span>' + productName + '</span></td>' +
             '<td class="td_cant">' + cant + '</td>' +
             '<td class="td_price">' + price + '</td>' +
@@ -256,7 +231,7 @@ function tpv() {
 
     } else {
 
-        tr = table.find('tbody').find('tr[data-id_product="' + idProduct + '"]');
+        tr = table.find('tbody').find('tr[data-id_product="' + idProduct + '"][data-type="' + type + '"]');
 
         cant = parseInt(tr.find('.td_cant').text());
         cant++;
@@ -275,8 +250,9 @@ function tpv() {
     $('#table_total').find('.total_price_articles').text(parseFloat(totalPriceArticles).toFixed(2) + ' €');
 
     //añadir línea al carrito
-    manageCart(idProduct, cant, 'sum', $('input[name="type_ticket"]').val());
+    manageCart(idProduct, cant, 'sum', type);
 }
+
 
 function sum() {
     tr = $(this).closest('tr');
@@ -343,6 +319,7 @@ function manageCart(id, cant, action, type) {
 
 //Genera un ticket con los datos del carrito y luego lo resetea
 function checkIn() {
+    $('.spinner').removeClass('d-none');
     $.ajax({
         url: $('input[name="path_check_in"]').val(),
         data: {},
@@ -365,7 +342,6 @@ function checkIn() {
 }
 
 function saveDetails(idTicket) {
-    $('.spinner').removeClass('d-none');
     $.ajax({
         url: $('input[name="path_save_details"]').val(),
         data: {
@@ -375,14 +351,42 @@ function saveDetails(idTicket) {
         dataType: 'json',
         success: function (data) {
             if (data.length > 0) {
-                alert('se han guardado ' + data.length + ' detalles');
+                //alert('se han guardado ' + data.length + ' detalles');
+                swal({
+                    title: "Venta realizada",
+                    text: "¿Quieres imprimir el ticket?",
+                    icon: "success",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: null,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "Imprimir Ticket",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    }
+                })
+                    .then((confirm) => {
+                        if (confirm) {
+                            swal("Aparecería la plantilla del ticket", {
+                                icon: "success",
+                            });
+                        }
+                    });
             }
             resetTable();
         },
         error: function (request, status, error) {
             swal({
                 title: "Error",
-                text: request.responseText,
+                text: status,
                 icon: "error",
             });
         },

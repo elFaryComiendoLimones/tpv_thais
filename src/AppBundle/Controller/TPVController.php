@@ -33,17 +33,21 @@ class TPVController extends Controller
         $shoppingCart = $common->shoppingCart($this->get('session'));
 
         $totalPrice = 0.00;
+        $cant = 0;
         if (!empty($shoppingCart->getCarrito())) {
-            foreach ($shoppingCart->getCarrito() as $line) {
-                $totalPrice = number_format($totalPrice + $line['cantidad'] * $line['item']->getPrice(), 2, '.', ',');
+            foreach ($shoppingCart->getCarrito() as $type) {
+                foreach ($type as $line){
+                    //$totalPrice = number_format((float)$totalPrice + $line['cantidad'] * $line['item']->getPrice(), 2, '.', ',');
+                    $totalPrice += number_format(floatval($line['cantidad'] * $line['item']->getPrice()), 2, '.', ',');
+                    $cant++;
+                }
             }
         }
 
         $params = [
             'shoppingCart' => $shoppingCart->getCarrito(),
-            'shoppingCartType' => $shoppingCart->getType(),
-            'totalPrice' => number_format($totalPrice, 2, '.', ',') . ' €',
-            'cant' => count($shoppingCart->getCarrito())
+            'totalPrice' => $totalPrice . ' €',
+            'cant' => $cant
         ];
 
         return $this->render('tpv/tpv.html.twig', $params);
@@ -172,29 +176,21 @@ class TPVController extends Controller
         } elseif ($type == 'treatment') {
             $product = $em->getRepository(Treatment::class)->find($id);
         }
-        $shoppingCart->setType($type);
 
         switch ($action) {
             case 'sum':
                 $cant = $request->get('cant');
-                $shoppingCart->add($id, $product, $cant);
+                $shoppingCart->add($id, $product, $cant, $type);
                 break;
             case 'minus':
-                $shoppingCart->sub($id, $product);
+                $shoppingCart->sub($id, $product, 1, $type);
                 break;
             case 'del':
-                $shoppingCart->del($id);
+                $shoppingCart->del($id, $type);
                 break;
             case 'reset':
                 $shoppingCart->resetCart();
                 break;
-        }
-
-        $lines = [];
-        $lines['type'] = $shoppingCart->getType();
-        $lines['type'] = $type;
-        foreach ($shoppingCart->getCarrito() as $line) {
-            $lines[] = ['id' => $line['id'], 'cant' => $line['cantidad']];
         }
 
         $encoder = new JsonEncoder();
@@ -207,7 +203,7 @@ class TPVController extends Controller
         });
         $serializer = new Serializer(array($normalizer), array($encoder));
 
-        $response = $serializer->serialize($lines, 'json');
+        $response = $serializer->serialize($shoppingCart, 'json');
 
         $jsonResponse = new JsonResponse();
         return $jsonResponse::fromJsonString($response);
