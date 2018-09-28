@@ -520,3 +520,58 @@ button.action{
           -webkit-transform: scale(1.0);
       }
 }
+
+
+/*----------------------Estilos del ticket---------------------*/
+
+.ticket {
+    font-size: 12px;
+    font-family: 'Times New Roman';
+    width: 175px;
+}
+
+.ticket table{
+    width: 100%;
+}
+
+.ticket td,
+.ticket th,
+.ticket tr,
+.ticket table {
+    border-top: 1px solid black;
+    border-collapse: collapse;
+}
+
+.ticket td.producto,
+.ticket th.producto {
+    width: 75px;
+    max-width: 75px;
+}
+
+.ticket td.cantidad,
+th.cantidad {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+.ticket td.precio,
+.ticket th.precio {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+.ticket .centrado {
+    text-align: center;
+    align-content: center;
+}
+
+.ticket .ticket {
+    width: 155px;
+    max-width: 155px;
+}
+.ticket .name_company{
+    width: 100%;
+    text-align: center;
+}

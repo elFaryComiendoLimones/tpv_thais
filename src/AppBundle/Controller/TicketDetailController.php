@@ -57,12 +57,41 @@ class TicketDetailController extends Controller
                         $ticketDetail->setIdTreatment($item);
                     }
                     $ticketDetail->setQuantity($line['cantidad']);
-                    $ticketDetail->setPrice(number_format($line['cantidad'] * $line['item']->getPrice(), 2, '.', ','));
+                    $ticketDetail->setPrice(number_format((float)$line['cantidad'] * (float)$line['item']->getPrice(), 2, '.', ','));
                     $em->persist($ticketDetail);
                     $em->flush();
                     $ticketDetails[] = $ticketDetail->getId();
                 }
             }
+
+            //generar html ticket
+            $ticket = '<div id="ticket_html" class="ticket">
+                                <div class="name_company">
+                                <b>ESTÉTICA THAIS</b><br>
+                                Avd.Andalucía 73<br>
+                                Tlf: 958654987<br>
+                                </div>
+                                <table>
+                                <thead>
+                                    <tr>
+                                      <th>CANT</th>
+                                      <th>PRO/TRA</th>
+                                      <th>PRECIO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+            foreach ($shoppingCart->getCarrito() as $type){
+                foreach ($type as $line){
+                    $ticket .= '<tr>
+                                    <td>'.$line['cantidad'].'</td>
+                                    <td>'.$line['item']->getName().'</td>
+                                    <td>'.number_format((float)$line['item']->getPrice() * (float)$line['cantidad'], 2, '.' , 'n').'</td>
+                                </tr>';
+                }
+            }
+            $ticket .= '</tbody>
+                        </table>
+                      </div>';
 
             $shoppingCart->resetCart();
 
@@ -78,10 +107,14 @@ class TicketDetailController extends Controller
         });
         $serializer = new Serializer(array($normalizer), array($encoder));
 
-        $response = $serializer->serialize($ticketDetails, 'json');
+        $response = $serializer->serialize($ticket, 'json');
 
         $jsonResponse = new JsonResponse();
         return $jsonResponse::fromJsonString($response);
+    }
+
+    private function renderTicket($shoppingCart){
+
     }
 
     /**

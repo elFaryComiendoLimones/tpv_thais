@@ -209,4 +209,27 @@ class TPVController extends Controller
         return $jsonResponse::fromJsonString($response);
     }
 
+    /**
+     * @Route("/get_shopping_cart", name="get_shopping_cart")
+     */
+    public function getShoppingCart(CommonService $common)
+    {
+        $shoppingCart = $common->shoppingCart($this->get('session'));
+
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array(
+            'typeCode', 'type', 'range',
+            'useCaseCode', 'useCase', 'updatedAt', 'updatedBy'));
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getName();
+        });
+        $serializer = new Serializer(array($normalizer), array($encoder));
+
+        $response = $serializer->serialize($shoppingCart->getCarrito(), 'json');
+
+        $jsonResponse = new JsonResponse();
+        return $jsonResponse::fromJsonString($response);
+    }
+
 }

@@ -317,6 +317,12 @@ function manageCart(id, cant, action, type) {
     });
 }
 
+function resetTable() {
+    $('#table_sale').find('tbody').children().remove();
+    $('.total_cant_articles').text(0);
+    $('.total_price_articles').text('0.00 €');
+}
+
 //Genera un ticket con los datos del carrito y luego lo resetea
 function checkIn() {
     $('.spinner').removeClass('d-none');
@@ -350,15 +356,18 @@ function saveDetails(idTicket) {
         type: 'POST',
         dataType: 'json',
         success: function (data) {
-            if (data.length > 0) {
-                //alert('se han guardado ' + data.length + ' detalles');
+            if (data !== null && typeof  data !== 'undefined') {
+                var ticket_print = $(data);
+                var ticket = document.createElement('div');
+                ticket.classList.add('d-flex');
+                ticket.classList.add('justify-content-center');
+                ticket.innerHTML = data.trim();
                 swal({
-                    title: "Venta realizada",
-                    text: "¿Quieres imprimir el ticket?",
-                    icon: "success",
+                    title: "¿Quieres imprimir el ticket?",
+                    content: ticket,
                     buttons: {
                         cancel: {
-                            text: "Cancelar",
+                            text: "No imprimir ticket",
                             value: null,
                             visible: true,
                             className: "",
@@ -375,9 +384,8 @@ function saveDetails(idTicket) {
                 })
                     .then((confirm) => {
                         if (confirm) {
-                            swal("Aparecería la plantilla del ticket", {
-                                icon: "success",
-                            });
+                            //ticket_print.print();
+                            printData(ticket_print);
                         }
                     });
             }
@@ -396,8 +404,46 @@ function saveDetails(idTicket) {
     });
 }
 
-function resetTable() {
-    $('#table_sale').find('tbody').children().remove();
-    $('.total_cant_articles').text(0);
-    $('.total_price_articles').text('0.00 €');
+function printData(divToPrint) {
+    divToPrint = document.getElementById(divToPrint.attr('id'));
+    var docHTML =
+        '<!DOCTYPE html>' +
+        '<html>' +
+        '<head>' +
+        '    <meta charset="utf-8">' +
+        '    <style>' +
+        '        .ticket {' +
+        '            font-size: 12px;' +
+        '            font-family: \'Times New Roman\';' +
+        '            width: 175px;' +
+        '        }' +
+        '        .ticket table{' +
+        '            width: 100%;' +
+        '        }' +
+        '        .ticket td,' +
+        '        .ticket th,' +
+        '        .ticket tr,' +
+        '        .ticket table {' +
+        '            border-top: 1px solid black;' +
+        '            border-collapse: collapse;' +
+        '        }' +
+        '        .ticket .ticket {' +
+        '            width: 155px;' +
+        '            max-width: 155px;' +
+        '        }' +
+        '        .ticket .name_company{' +
+        '            width: 100%;' +
+        '            text-align: center;' +
+        '        }' +
+        '    </style>' +
+        '</head>' +
+        '<body>' +
+        divToPrint.outerHTML +
+        '</body>' +
+        '</html>';
+
+    newWin = window.open("");
+    newWin.document.write(docHTML);
+    newWin.print();
+    newWin.close();
 }
