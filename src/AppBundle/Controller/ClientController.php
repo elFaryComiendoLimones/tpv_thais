@@ -30,10 +30,13 @@ class ClientController extends Controller
     {
 
         $repo = $this->getDoctrine()->getRepository(Client::class);
-        $rows = $repo->createQueryBuilder('c')
+
+        $query = $repo->createQueryBuilder('c')
             ->select('count(c.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->where('c.active = :active')
+            ->setParameter(':active', 1)
+            ->getQuery();
+        $rows = $query->getSingleScalarResult();
 
         $limit = 10;
         $pagination = new Pagination($rows, $page, $limit);

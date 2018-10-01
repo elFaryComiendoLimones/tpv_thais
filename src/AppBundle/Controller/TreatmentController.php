@@ -27,6 +27,8 @@ class TreatmentController extends Controller
         $repo = $this->getDoctrine()->getRepository(Treatment::class);
         $rows = $repo->createQueryBuilder('tr')
             ->select('count(tr.id)')
+            ->where('tr.active = :active')
+            ->setParameter(':active', 1)
             ->getQuery()
             ->getSingleScalarResult();
 

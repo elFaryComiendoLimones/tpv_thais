@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Ticket;
+use AppBundle\Entity\User;
 use AppBundle\Utils\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -95,5 +96,6 @@ class TicketController extends Controller
         $jsonResponse = new JsonResponse();
         return $jsonResponse::fromJsonString($response);
     }
+
 
 }

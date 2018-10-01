@@ -33,6 +33,8 @@ class EmployeeController extends Controller
         $repo = $this->getDoctrine()->getRepository(User::class);
         $rows = $repo->createQueryBuilder('u')
             ->select('count(u.id)')
+            ->where('u.enabled = :active')
+            ->setParameter(':active', 1)
             ->getQuery()
             ->getSingleScalarResult();
 

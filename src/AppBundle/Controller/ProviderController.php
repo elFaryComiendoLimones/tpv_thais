@@ -27,6 +27,8 @@ class ProviderController extends Controller
         $repo = $this->getDoctrine()->getRepository(Provider::class);
         $rows = $repo->createQueryBuilder('p')
             ->select('count(p.id)')
+            ->where('p.active = :active')
+            ->setParameter(':active', 1)
             ->getQuery()
             ->getSingleScalarResult();
 

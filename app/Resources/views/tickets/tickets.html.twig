@@ -5,7 +5,31 @@
 
     <h1>Lista de Tickets</h1>
 
-    <table class="table">
+
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSearch"
+            aria-expanded="false" aria-controls="collapseSearch">
+        Filtrar tickets <i class="fas fa-sort-down"></i>
+    </button>
+    <!-- form complex example -->
+    <div id="collapseSearch" class="mt-4 bg-white p-3 collapse">
+        <form class="form-row" method="get" action="{{ path('tickets') }}">
+            <div class="col-sm-4 pb-3">
+                <label for="employ">Empleado</label>
+                <input type="text" class="form-control" name="employ" placeholder="Empleado...">
+            </div>
+            <div class="col-sm-4 pb-3">
+                <label for="client">Cliente</label>
+                <input type="text" class="form-control" name="client" placeholder="Cliente...">
+            </div>
+            <div class="col-sm-4 pb-3">
+                <label for="date_sale">Fecha de venta</label>
+                <input type="date" class="form-control" name="date_sale">
+            </div>
+            <button class="btn btn-primary" type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <table class="table table_searcheable mt-3">
         <thead class="thead-dark">
         <tr>
             <th scope="col">ID</th>
@@ -61,8 +85,8 @@
                                     {% else %}
                                         <td>{{ detail.getIdTreatment().name }}</td>
                                     {% endif %}
-                                    <td>{{  detail.getQuantity() }}</td>
-                                    <td>{{  detail.getPrice() }} €</td>
+                                    <td>{{ detail.getQuantity() }}</td>
+                                    <td>{{ detail.getPrice() }} €</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -108,3 +132,7 @@
 
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/search_table.js') }}"></script>
+{% endblock %}
