@@ -22,6 +22,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\ShoppingCart\Cart;
 use AppBundle\Service\CommonService;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class TicketController extends Controller
 {
@@ -58,21 +59,26 @@ class TicketController extends Controller
     }*/
 
     /**
-     * @Route("/tickets/{page}/{employee}/{client}/{date}", defaults={"page"="1", "employee"="", "client"="", "date"=""}, name="tickets")
+     * @Route("/tickets/{page}", defaults={"page"="1"}, name="tickets")
      */
-    public function index($page, $employee, $client, $date)
+    public function index($page)
     {
+        $request = Request::createFromGlobals()->query;
+        $employee = $request->get('employee');
+        $client = $request->get('client');
+        $date = $request->get('date');
+
         $repo = $this->getDoctrine()->getRepository(Ticket::class);
 
         $filters = $this->checkFilters($employee, $client, $date);
         $rows = -1;
-        if(!empty($filters)){
+        if(empty($filters)){
             $rows = $repo->createQueryBuilder('t')
                 ->select('count(t.id)')
                 ->getQuery()
                 ->getSingleScalarResult();
         }else{
-            count($repo->findBy($filters));
+            $rows = count($repo->findBy($filters));
         }
 
         $limit = 7;
@@ -92,6 +98,12 @@ class TicketController extends Controller
                 'previous' => $pagination->getPrevious(),
                 'range' => $pagination->getRange(),
                 'actual' => $pagination->getActual()
+            ],
+            'data_select_filters' => $this->getDataSelectFilters(),
+            'filters' => [
+                'id_user' => $employee,
+                'id_client' => $client,
+                'date_sale' => $date
             ]
         ];
 
@@ -103,17 +115,30 @@ class TicketController extends Controller
         $em = $this->getDoctrine();
         $filters = [];
         if(!empty($employee)){
-            $id_user = $em->getRepository(User::class)->findByUsername($employee);
-            $filters['id_user'] = $id_user;
+            $id_user = $em->getRepository(User::class)->find($employee);
+            $filters['id_user'] = $id_user->getId();
         }
         if(!empty($client)) {
-            $id_client = $em->getRepository(Client::class)->findByName($client);
-            $filters['client'] = $id_client;
+            $id_client = $em->getRepository(Client::class)->find($client);
+            $filters['id_client'] = $id_client->getId();
         }
         if(!empty($date)){
-            $filters['date'] = $date;
+            $filters['date_sale'] = new \DateTime($date);
         }
         return $filters;
+    }
+
+    private function getDataSElectFilters(){
+        $em = $this->getDoctrine();
+
+        $users = $em->getRepository(User::class)->findByEnabled(1);
+        $clients = $em->getRepository(Client::class)->findByActive(1);
+
+        $dataSelectFilters = [
+            'users' => $users,
+            'clients' => $clients
+        ];
+        return $dataSelectFilters;
     }
 
     /**
@@ -132,8 +157,7 @@ class TicketController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $ticket->setIdUser($this->getUser());
-            $date = new \DateTime();
-            $ticket->setDateSale($date->getTimestamp());
+            $ticket->setDateSale(new \DateTime("now"));
 
             $em->persist($ticket);
             $em->flush();

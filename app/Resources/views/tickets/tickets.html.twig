@@ -15,15 +15,35 @@
         <form class="form-row" method="get" action="{{ path('tickets') }}">
             <div class="col-sm-4 pb-3">
                 <label for="employ">Empleado</label>
-                <input type="text" class="form-control" name="employee" placeholder="Empleado...">
+                {#<input type="text" class="form-control" name="employee" placeholder="Empleado...">#}
+                <select class="form-control" name="employee">
+                    <option value="">Selecciona un empleado</option>
+                    {% for user in data_select_filters.users %}
+                        {% if filters is not empty and filters.id_user == user.getId() %}
+                                <option value="{{ user.getId() }}" selected>{{ user.getUsername() }}</option>
+                            {% else %}
+                                <option value="{{ user.getId() }}">{{ user.getUsername() }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-sm-4 pb-3">
                 <label for="client">Cliente</label>
-                <input type="text" class="form-control" name="client" placeholder="Cliente...">
+                {#<input type="text" class="form-control" name="client" placeholder="Cliente...">#}
+                <select class="form-control" name="client">
+                    <option value="">Selecciona un cliente</option>
+                    {% for client in data_select_filters.clients %}
+                        {% if filters is not empty and filters.id_client == client.getId() %}
+                            <option value="{{ client.getId() }}" selected>{{ client.__toString() }}</option>
+                        {% else %}
+                            <option value="{{ client.getId() }}">{{ client.__toString() }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-sm-4 pb-3">
                 <label for="date_sale">Fecha de venta</label>
-                <input type="date" class="form-control" name="date">
+                <input type="date" class="form-control" name="date" value="{{ filters is not empty ? filters.date_sale }}">
             </div>
             <button class="btn btn-primary" type="submit">Filtrar</button>
         </form>
@@ -44,7 +64,7 @@
             <tr>
                 <th>{{ t.id }}</th>
                 <td>{{ t.getIdUser().getUserName() }}</td>
-                <td>{{ t.getIdClient() is not empty ? t.getIdClient().getName() : 'Sin cliente asociado' }}</td>
+                <td>{{ t.getIdClient() is not empty ? t.getIdClient().__toString()  : 'Sin cliente asociado' }}</td>
                 <td>{{ t.getDateSale()|date('d/m/Y') }}</td>
                 <td colspan="2">
                     <a href="#" class="btn btn-dark view_details" title="Ver detalles del ticket"
@@ -105,27 +125,59 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item">
-                    <a class="page-link" href="{{ path('tickets', {'page' : pagination.previous}) }}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
+                    {% if filters is empty %}
+                        <a class="page-link" href="{{ path('tickets', {'page' : pagination.previous}) }}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    {% else %}
+                        <a class="page-link"
+                           href="{{ path('tickets', {'page' : pagination.previous}) }}?employee={{ filters.id_user }}&client={{ filters.id_client }}&date={{ filters.date_sale }}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    {% endif %}
                 </li>
                 {% for pag in pagination.range %}
                     {% if pagination.actual == pag %}
-                        <li class="page-item active"><a class="page-link"
-                                                        href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
+                        {% if filters is empty %}
+                            <li class="page-item active"><a class="page-link"
+                                                            href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item active"><a class="page-link"
+                                                            href="{{ path('tickets', {'page' : pag}) }}?employee={{ filters.id_user }}&client={{ filters.id_client }}&date={{ filters.date_sale }}">{{ pag }}</a>
+                            </li>
+                        {% endif %}
                     {% else %}
-                        <li class="page-item"><a class="page-link"
-                                                 href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
+                        {% if filters is empty %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{{ path('tickets', {'page' : pag}) }}?employee={{ filters.id_user }}&client={{ filters.id_client }}&date={{ filters.date_sale }}">{{ pag }}</a></li>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ path('tickets', {'page' : pagination.next}) }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
+                {% if filters is empty %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('tickets', {'page' : pagination.next}) }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ path('tickets', {'page' : pagination.next}) }}?employee={{ filters.id_user }}&client={{ filters.id_client }}&date={{ filters.date_sale }}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
     {% endif %}

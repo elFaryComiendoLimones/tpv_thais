@@ -347,4 +347,12 @@ class Client
         $this->tickets = $tickets;
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getName() . ' ' . $this->getSurname1() . ' ' . $this->getSurname2();
+    }
+
 }

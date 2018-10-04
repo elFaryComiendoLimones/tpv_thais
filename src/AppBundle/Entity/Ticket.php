@@ -43,7 +43,7 @@ class Ticket
     private $id_client;
 
     /**
-     * @ORM\Column(type="bigint", length=200)
+     * @ORM\Column(type="date")
      */
     private $date_sale;
 
