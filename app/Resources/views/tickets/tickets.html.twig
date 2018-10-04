@@ -15,7 +15,7 @@
         <form class="form-row" method="get" action="{{ path('tickets') }}">
             <div class="col-sm-4 pb-3">
                 <label for="employ">Empleado</label>
-                <input type="text" class="form-control" name="employ" placeholder="Empleado...">
+                <input type="text" class="form-control" name="employee" placeholder="Empleado...">
             </div>
             <div class="col-sm-4 pb-3">
                 <label for="client">Cliente</label>
@@ -23,13 +23,13 @@
             </div>
             <div class="col-sm-4 pb-3">
                 <label for="date_sale">Fecha de venta</label>
-                <input type="date" class="form-control" name="date_sale">
+                <input type="date" class="form-control" name="date">
             </div>
             <button class="btn btn-primary" type="submit">Filtrar</button>
         </form>
     </div>
 
-    <table class="table table_searcheable mt-3">
+    <table id="table_ticketssss" class="table table_searcheable mt-3">
         <thead class="thead-dark">
         <tr>
             <th scope="col">ID</th>
@@ -134,5 +134,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('assets/js/search_table.js') }}"></script>
+    <script src="{{ asset('assets/js/tickets.js') }}"></script>
 {% endblock %}

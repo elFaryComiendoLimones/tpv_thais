@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Ticket;
 use AppBundle\Entity\User;
+use AppBundle\Entity\Client;
 use AppBundle\Utils\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,10 +26,10 @@ use AppBundle\Service\CommonService;
 class TicketController extends Controller
 {
 
-    /**
+    /*
      * @Route("/tickets/{page}", defaults={"page"="1"}, name="tickets")
      */
-    public function index($page)
+    /*public function index($page)
     {
 
         $repo = $this->getDoctrine()->getRepository(Ticket::class);
@@ -54,7 +55,66 @@ class TicketController extends Controller
         ];
 
         return $this->render('tickets/tickets.html.twig', $params);
+    }*/
 
+    /**
+     * @Route("/tickets/{page}/{employee}/{client}/{date}", defaults={"page"="1", "employee"="", "client"="", "date"=""}, name="tickets")
+     */
+    public function index($page, $employee, $client, $date)
+    {
+        $repo = $this->getDoctrine()->getRepository(Ticket::class);
+
+        $filters = $this->checkFilters($employee, $client, $date);
+        $rows = -1;
+        /*if(!empty($filters)){*/
+            $rows = $repo->createQueryBuilder('t')
+                ->select('count(t.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        /*}else{
+            $queryCount = $repo->createQueryBuilder('t')
+                ->select('count(t.id)');
+        }*/
+
+        $limit = 7;
+        $pagination = new Pagination($rows, $page, $limit);
+
+        if(empty($filters)){
+            $tickets = $repo->findBy([],['date_sale' => 'DESC'],$limit, $pagination->getOffset());
+        }else{
+            $tickets = $repo->findBy($filters,['date_sale' => 'DESC'],$limit, $pagination->getOffset());
+        }
+
+
+        $params = [
+            'tickets' => $tickets,
+            'pagination' => [
+                'next' => $pagination->getNext(),
+                'previous' => $pagination->getPrevious(),
+                'range' => $pagination->getRange(),
+                'actual' => $pagination->getActual()
+            ]
+        ];
+
+        return $this->render('tickets/tickets.html.twig', $params);
+    }
+
+
+    private function checkFilters($employee, $client, $date){
+        $em = $this->getDoctrine();
+        $filters = [];
+        if(!empty($employee)){
+            $id_user = $em->getRepository(User::class)->findByUsername($employee);
+            $filters['id_user'] = $id_user;
+        }
+        if(!empty($client)) {
+            $id_client = $em->getRepository(Client::class)->findByName($client);
+            $filters['client'] = $id_client;
+        }
+        if(!empty($date)){
+            $filters['date'] = $date;
+        }
+        return $filters;
     }
 
     /**
@@ -96,6 +156,5 @@ class TicketController extends Controller
         $jsonResponse = new JsonResponse();
         return $jsonResponse::fromJsonString($response);
     }
-
 
 }
