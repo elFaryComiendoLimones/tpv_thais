@@ -66,15 +66,14 @@ class TicketController extends Controller
 
         $filters = $this->checkFilters($employee, $client, $date);
         $rows = -1;
-        /*if(!empty($filters)){*/
+        if(!empty($filters)){
             $rows = $repo->createQueryBuilder('t')
                 ->select('count(t.id)')
                 ->getQuery()
                 ->getSingleScalarResult();
-        /*}else{
-            $queryCount = $repo->createQueryBuilder('t')
-                ->select('count(t.id)');
-        }*/
+        }else{
+            count($repo->findBy($filters));
+        }
 
         $limit = 7;
         $pagination = new Pagination($rows, $page, $limit);
