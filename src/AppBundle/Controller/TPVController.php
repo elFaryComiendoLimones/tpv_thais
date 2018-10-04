@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Client;
 use AppBundle\Entity\Treatment;
 use AppBundle\Utils\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -44,10 +45,14 @@ class TPVController extends Controller
             }
         }
 
+        /*Lista de clientes para select de asociar cliente*/
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findByActive(1);
+
         $params = [
             'shoppingCart' => $shoppingCart->getCarrito(),
             'totalPrice' => $totalPrice . ' €',
-            'cant' => $cant
+            'cant' => $cant,
+            'client_list' => $clients
         ];
 
         return $this->render('tpv/tpv.html.twig', $params);

@@ -1,6 +1,7 @@
 var path_assets = $('input[name="path_assets"]').val();
 $(document).ready(function () {
 
+    $('.chosen-select').chosen();
     //Funcionalidad de la calculadora
     calculator();
 
@@ -59,17 +60,30 @@ $(document).ready(function () {
     //Ver productos (limpia carro)
     $('#load_products').on('click', function (e) {
         e.preventDefault();
+
+        paginateProducts();
+        $('#bt-list').addClass('active');
+        $('#bt-grid').removeClass('active');
+        $('#grid-view').addClass('d-none');
+        $('#list-view').removeClass('d-none');
+
         $('#load_products').addClass('active');
         $('#load_treatments').removeClass('active');
-        paginateProducts();
         $('input[name="type_ticket"]').val('product');
     });
     //Ver tratamientos (limpia carro)
     $('#load_treatments').on('click', function (e) {
         e.preventDefault();
+
+        paginateTreatments();
+
+        $('#bt-list').addClass('active');
+        $('#bt-grid').removeClass('active');
+        $('#grid-view').addClass('d-none');
+        $('#list-view').removeClass('d-none');
+
         $('#load_products').removeClass('active');
         $('#load_treatments').addClass('active');
-        paginateTreatments();
         $('input[name="type_ticket"]').val('treatment');
     });
 
@@ -77,6 +91,21 @@ $(document).ready(function () {
     $('#table_sale').find('tbody').find('tr').find('.sum').on('click', sum);
     $('#table_sale').find('tbody').find('tr').find('.minus').on('click', minus);
     $('#table_sale').find('tbody').find('tr').find('.rm').on('click', removeRow);
+
+
+    //Pone value de input hidden id_cliente (este valor se envía al facturar el ticket)
+    $('#btn_associate_id_client').on('click', function () {
+        $('#id_client_associate').val($('#select_id_client').val());
+        $('#btn_associate_id_client').removeClass('btn-primary');
+        $('#btn_associate_id_client').addClass('btn-success');
+        $('#btn_associate_id_client').append('<i class="fas fa-check ml-2"></i>');
+    });
+
+    $('#modal_associate_client').on('hidden.bs.modal', function () {
+        $('#btn_associate_id_client').addClass('btn-primary');
+        $('#btn_associate_id_client').removeClass('btn-success');
+        $('#btn_associate_id_client').children().last().remove();
+    });
 
 });
 
@@ -324,20 +353,57 @@ function resetTable() {
     $('#table_sale').find('tbody').children().remove();
     $('.total_cant_articles').text(0);
     $('.total_price_articles').text('0.00 €');
+    $('#id_client_associate').val('');
 }
 
 //Genera un ticket con los datos del carrito y luego lo resetea
 function checkIn() {
+    if (!$('input[name="id_client_associate"]').val()) {
+        swal({
+            title: "Ticket sin cliente asociado",
+            text: '¿Estás seguro de que no quieres asociar la compra a un cliente?',
+            buttons: {
+                cancel: {
+                    text: "Cancelar",
+                    value: null,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                },
+                confirm: {
+                    text: "Continuar sin asociar",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true
+                }
+            }
+        })
+            .then((confirm) => {
+                if (confirm) {
+                    doCheckIn();
+                }
+            });
+    } else {
+        doCheckIn();
+    }
+
+}
+
+function doCheckIn() {
     $('.spinner').removeClass('d-none');
     $.ajax({
         url: $('input[name="path_check_in"]').val(),
-        data: {},
+        data: {
+            'id_client': $('input[name="id_client_associate"]').val()
+        },
         type: 'POST',
         dataType: 'json',
         success: function (data) {
             //Si el ticket se ha guardado
             if (typeof data !== 'undefined') {
                 saveDetails(data);
+                $('input[name="id_client_associate"]').val('');
             }
         },
         error: function (xhr, status) {
@@ -349,6 +415,7 @@ function checkIn() {
         }
     });
 }
+
 
 function saveDetails(idTicket) {
     $.ajax({

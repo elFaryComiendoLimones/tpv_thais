@@ -27,37 +27,6 @@ use Symfony\Component\Validator\Constraints\DateTime;
 class TicketController extends Controller
 {
 
-    /*
-     * @Route("/tickets/{page}", defaults={"page"="1"}, name="tickets")
-     */
-    /*public function index($page)
-    {
-
-        $repo = $this->getDoctrine()->getRepository(Ticket::class);
-        $rows = $repo->createQueryBuilder('t')
-            ->select('count(t.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        $limit = 7;
-        $pagination = new Pagination($rows, $page, $limit);
-
-        $tickets = $repo->findBy([],['date_sale' => 'DESC'],$limit, $pagination->getOffset());
-
-
-        $params = [
-            'tickets' => $tickets,
-            'pagination' => [
-                'next' => $pagination->getNext(),
-                'previous' => $pagination->getPrevious(),
-                'range' => $pagination->getRange(),
-                'actual' => $pagination->getActual()
-            ]
-        ];
-
-        return $this->render('tickets/tickets.html.twig', $params);
-    }*/
-
     /**
      * @Route("/tickets/{page}", defaults={"page"="1"}, name="tickets")
      */
@@ -144,8 +113,10 @@ class TicketController extends Controller
     /**
      * @Route("/check_in", name="check_in")
      */
-    public function checkIn()
+    public function checkIn(Request $request)
     {
+
+        $id_client = $request->get('id_client');
 
         $common = new CommonService();
         $shoppingCart = $common->shoppingCart($this->get('session'));
@@ -157,6 +128,12 @@ class TicketController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $ticket->setIdUser($this->getUser());
+
+            if(!empty($id_client)){
+                $client = $em->getRepository(Client::class)->find($id_client);
+                $ticket->setIdClient($client);
+            }
+
             $ticket->setDateSale(new \DateTime("now"));
 
             $em->persist($ticket);

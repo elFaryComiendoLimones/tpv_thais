@@ -5,9 +5,9 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/css/chosen.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/js/jquery-ui-1.12.1.custom/jquery-ui.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/js/datatable/datatables.css') }}">
     </head>
     <body>
         {% block body %}{% endblock %}
@@ -16,7 +16,7 @@
             <script src="{{ asset('assets/bootstrap-4.1.3/js/bootstrap.js') }}"></script>
             <script src="{{ asset('assets/js/sweetalert/dist/sweetalert.min.js') }}"></script>
             <script src="{{ asset('assets/js/jquery-ui-1.12.1.custom/jquery-ui.min.js') }}"></script>
-            <script src="{{ asset('assets/js/datatable/datatables.js') }}"></script>
+            <script src="{{ asset('assets/js/chosen.jquery.min.js') }}"></script>
         {% endblock %}
     </body>
 </html>
