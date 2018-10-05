@@ -1,62 +1,80 @@
 {% extends 'sidebar.html.twig' %}
 
 {% block content %}
-    <h1>Lista de empleados</h1>
+    {#<h1>Lista de empleados</h1>#}
 
     <a class="btn btn-dark mb-2" href="{{ path('fos_user_registration_register') }}">Añadir empleado</a>
 
-    <table class="table">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Imagen</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Email</th>
-            <th scope="col" colspan="2">Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% set cont = 1 %}
-        {% for user in users %}
-            <tr>
-                <th scope="row">{{ cont }}</th>
-                <td>
-                    <div class="image-perfil">
-                        {% if user.image is not empty %}
-                            <img alt="imagen perfil" src="{{ asset('uploads/img/user/' ~ user.image) }}">
-                        {% else %}
-                            <img alt="imagen perfil" src="{{ asset('uploads/img/user/user.png') }}">
-                        {% endif %}
-                    </div>
-                </td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
-                <td colspan="2">
-                    <a href="{{ path('edit-user', { 'id' : user.id }) }}" class="btn btn-warning">Editar</a>
-                    <a href="{{ path('delete-user', { 'id': user.id }) }}" class="btn btn-danger message-confirm" data-confirm="¿Estás seguro de borrar el empleado?" data-confirmed="El empleado se ha borrado correctamente!">
-                        Eliminar
-                    </a>
-                </td>
-            </tr>
-            {% set cont = cont + 1 %}
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="card rounded">
+        <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+            <div class="card-icon">
+                <i class="fas fa-list-ul"></i>
+            </div>
+            <h4 class="card-title m-0 ml-2">Lista de Empleados</h4>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Imagen</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Email</th>
+                    <th scope="col" colspan="2">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set cont = 1 %}
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{ cont }}</th>
+                        <td>
+                            <div class="image-perfil">
+                                {% if user.image is not empty %}
+                                    <img alt="imagen perfil" src="{{ asset('uploads/img/user/' ~ user.image) }}">
+                                {% else %}
+                                    <img alt="imagen perfil" src="{{ asset('uploads/img/user/user.png') }}">
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td colspan="2">
+                            <a href="{{ path('edit-user', { 'id' : user.id }) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                            <a href="{{ path('delete-user', { 'id': user.id }) }}"
+                               class="btn btn-danger message-confirm"
+                               data-confirm="¿Estás seguro de borrar el empleado?"
+                               data-confirmed="El empleado se ha borrado correctamente!">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% set cont = cont + 1 %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
     {% if pagination.range|length > 1 %}
-        <nav aria-label="Page navigation example">
+        <nav class="mt-2" aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item">
-                    <a class="page-link" href="{{ path('employees', {'page' : pagination.previous}) }}" aria-label="Previous">
+                    <a class="page-link" href="{{ path('employees', {'page' : pagination.previous}) }}"
+                       aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
                     </a>
                 </li>
                 {% for pag in pagination.range %}
                     {% if pagination.actual == pag %}
-                        <li class="page-item active"><a class="page-link" href="{{ path('employees', {'page' : pag}) }}">{{ pag }}</a></li>
+                        <li class="page-item active"><a class="page-link"
+                                                        href="{{ path('employees', {'page' : pag}) }}">{{ pag }}</a>
+                        </li>
                     {% else %}
-                        <li class="page-item"><a class="page-link" href="{{ path('employees', {'page' : pag}) }}">{{ pag }}</a></li>
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ path('employees', {'page' : pag}) }}">{{ pag }}</a></li>
                     {% endif %}
                 {% endfor %}
                 <li class="page-item">

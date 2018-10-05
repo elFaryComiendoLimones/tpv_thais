@@ -3,15 +3,13 @@
 {% block content %}
     <input type="hidden" name="path_view_info_ticket" value="{{ path('get_details') }}">
 
-    <h1>Lista de Tickets</h1>
 
-
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSearch"
+    <button class="btn btn-primary mb-2" type="button" data-toggle="collapse" data-target="#collapseSearch"
             aria-expanded="false" aria-controls="collapseSearch">
         Filtrar tickets <i class="fas fa-sort-down"></i>
     </button>
     <!-- form complex example -->
-    <div id="collapseSearch" class="mt-4 bg-white p-3 collapse">
+    <div id="collapseSearch" class="mt-4 mb-4 bg-white p-3 collapse">
         <form class="form-row" method="get" action="{{ path('tickets') }}">
             <div class="col-sm-4 pb-3">
                 <label for="employ">Empleado</label>
@@ -19,9 +17,9 @@
                     <option value="">Selecciona un empleado</option>
                     {% for user in data_select_filters.users %}
                         {% if filters is not empty and filters.id_user == user.getId() %}
-                                <option value="{{ user.getId() }}" selected>{{ user.getUsername() }}</option>
-                            {% else %}
-                                <option value="{{ user.getId() }}">{{ user.getUsername() }}</option>
+                            <option value="{{ user.getId() }}" selected>{{ user.getUsername() }}</option>
+                        {% else %}
+                            <option value="{{ user.getId() }}">{{ user.getUsername() }}</option>
                         {% endif %}
                     {% endfor %}
                 </select>
@@ -41,39 +39,50 @@
             </div>
             <div class="col-sm-4 pb-3">
                 <label for="date_sale">Fecha de venta</label>
-                <input type="date" class="form-control" name="date" value="{{ filters is not empty ? filters.date_sale }}">
+                <input type="date" class="form-control" name="date"
+                       value="{{ filters is not empty ? filters.date_sale }}">
             </div>
             <button class="btn btn-primary" type="submit">Filtrar</button>
         </form>
     </div>
 
-    <table id="table_ticketssss" class="table table_searcheable mt-3">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Empleado</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Fecha de venta</th>
-            <th scope="col" colspan="2">Ver detalles</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for t in tickets %}
-            <tr>
-                <th>{{ t.id }}</th>
-                <td>{{ t.getIdUser().getUserName() }}</td>
-                <td>{{ t.getIdClient() is not empty ? t.getIdClient().__toString()  : 'Sin cliente asociado' }}</td>
-                <td>{{ t.getDateSale()|date('d/m/Y') }}</td>
-                <td colspan="2">
-                    <a href="#" class="btn btn-dark view_details" title="Ver detalles del ticket"
-                       data-id_ticket="{{ t.id }}" data-toggle="modal" data-target="#dataTicket{{ t.id }}">
-                        <i class="fas fa-info-circle"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="card rounded">
+        <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+            <div class="card-icon">
+                <i class="fas fa-list-ul"></i>
+            </div>
+            <h4 class="card-title m-0 ml-2">Lista de Ventas</h4>
+        </div>
+        <div class="card-body">
+            <table id="table_ticketssss" class="table table_searcheable mt-3">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Empleado</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Fecha de venta</th>
+                    <th scope="col" colspan="2">Ver detalles</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in tickets %}
+                    <tr>
+                        <th>{{ t.id }}</th>
+                        <td>{{ t.getIdUser().getUserName() }}</td>
+                        <td>{{ t.getIdClient() is not empty ? t.getIdClient().__toString()  : 'Sin cliente asociado' }}</td>
+                        <td>{{ t.getDateSale()|date('d/m/Y') }}</td>
+                        <td colspan="2">
+                            <a href="#" class="btn btn-dark view_details" title="Ver detalles del ticket"
+                               data-id_ticket="{{ t.id }}" data-toggle="modal" data-target="#dataTicket{{ t.id }}">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- Modals -->
     {% for t in tickets %}
@@ -120,7 +129,7 @@
     {% endfor %}
 
     {% if pagination.range|length > 1 %}
-        <nav aria-label="Page navigation example">
+        <nav class="mt-2" aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item">
                     {% if filters is empty %}
@@ -155,7 +164,8 @@
                                                      href="{{ path('tickets', {'page' : pag}) }}">{{ pag }}</a></li>
                         {% else %}
                             <li class="page-item"><a class="page-link"
-                                                     href="{{ path('tickets', {'page' : pag}) }}?employee={{ filters.id_user }}&client={{ filters.id_client }}&date={{ filters.date_sale }}">{{ pag }}</a></li>
+                                                     href="{{ path('tickets', {'page' : pag}) }}?employee={{ filters.id_user }}&client={{ filters.id_client }}&date={{ filters.date_sale }}">{{ pag }}</a>
+                            </li>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -185,7 +195,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('.chosen-select').chosen();
         });
     </script>

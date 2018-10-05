@@ -31,7 +31,7 @@ class TreatmentType extends AbstractType
             ->add('name', null, array('label' => 'Nombre*', 'attr' => array('class' => 'form-control', 'placeholder' => 'Nombre del tratamiento')))
             ->add('price', MoneyType::class, array('label' => 'Precio*', 'attr' => array('class' => 'form-control', 'placeholder' => 'Precio del tratamiento')))
             ->add('description', null, array('required' => false, 'label' => 'Descripción', 'attr' => array('class' => 'form-control', 'placeholder' => 'Descripción del tratamiento')))
-            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-success btn-lg float-right')));
+            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-submit btn-lg float-right shadow-sm')));
     }
 
     public function configureOptions(OptionsResolver $resolver)

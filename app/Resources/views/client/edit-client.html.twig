@@ -1,6 +1,5 @@
 {% extends 'sidebar.html.twig' %}
 {% block content %}
-    <h1>Editar cliente</h1>
 
     {% if confirmed is defined and confirmed is not empty %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -11,80 +10,68 @@
         </div>
     {% endif %}
 
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6 mx-auto">
-                        <div class="card border-secondary">
-                            <div class="card-header">
-                                <h3 class="mb-0 my-2">Datos del cliente</h3>
-                            </div>
-                            <div class="card-body">
-                                {{ form_start(form, {'action': path('edit-client'), 'method': 'POST'}) }}
-                                <div class="form-group">
-                                    {{ form_label(form.name) }}
-                                    {{ form_widget(form.name) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.surname1) }}
-                                    {{ form_widget(form.surname1) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.surname2) }}
-                                    {{ form_widget(form.surname2) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.dni) }}
-                                    {{ form_widget(form.dni) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.province) }}
-                                    {{ form_widget(form.province) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.town) }}
-                                    {{ form_widget(form.town) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.postcode) }}
-                                    {{ form_widget(form.postcode) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.street) }}
-                                    {{ form_widget(form.street) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.num_street) }}
-                                    {{ form_widget(form.num_street) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.birthdate) }}
-                                    {{ form_widget(form.birthdate) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.telephone) }}
-                                    {{ form_widget(form.telephone) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.email) }}
-                                    {{ form_widget(form.email) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_widget(form.save) }}
-                                </div>
-                                {{ form_end(form) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--/row-->
-
+    <div class="card rounded">
+        <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+            <div class="card-icon w-25">
+                <h4 class="card-title m-0 ml-2">Editar cliente</h4>
             </div>
-            <!--/col-->
         </div>
-        <!--/row-->
+        <div class="card-body">
+            {{ form_start(form, {'action': path('edit-client'), 'method': 'POST'}) }}
+            <div class="form-group">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.surname1) }}
+                {{ form_widget(form.surname1) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.surname2) }}
+                {{ form_widget(form.surname2) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.dni) }}
+                {{ form_widget(form.dni) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.province) }}
+                {{ form_widget(form.province) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.town) }}
+                {{ form_widget(form.town) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.postcode) }}
+                {{ form_widget(form.postcode) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.street) }}
+                {{ form_widget(form.street) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.num_street) }}
+                {{ form_widget(form.num_street) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.birthdate) }}
+                {{ form_widget(form.birthdate) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.telephone) }}
+                {{ form_widget(form.telephone) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.save) }}
+            </div>
+            {{ form_end(form) }}
+        </div>
     </div>
-    <!--/container-->
-    <a class="btn btn-dark" href="{{ path('clients') }}">Volver</a>
+
+    <a class="btn btn-dark mt-2" href="{{ path('clients') }}">Volver</a>
 {% endblock %}

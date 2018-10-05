@@ -1,6 +1,21 @@
 {% trans_default_domain 'FOSUserBundle' %}
+{% extends 'sidebar.html.twig' %}
 
+{% block content %}
 <div class="fos_user_user_show">
-    <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
-    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Perfil actualizado!</h4>
+        <p>
+        <div class="image-perfil">
+            {% if app.user.image is not empty %}
+                <img alt="imagen perfil" src="{{ asset('uploads/img/user/' ~ app.user.image) }}">
+            {% else %}
+                <img alt="imagen perfil" src="{{ asset('uploads/img/user/user.png') }}">
+            {% endif %}
+        </div>
+        </p>
+        <p><b>Perfil: </b>{{ user.username }}</p>
+        <p><b>Email: </b>{{ user.email }}</p>
+    </div>
 </div>
+{% endblock %}

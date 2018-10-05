@@ -1,10 +1,11 @@
-{% extends "@FOSUser/layout.html.twig" %}
-
 {% trans_default_domain 'FOSUserBundle' %}
+{% extends 'sidebar.html.twig' %}
 
-{% block fos_user_content %}
-    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
-    {% if targetUrl %}
-    <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
-    {% endif %}
-{% endblock fos_user_content %}
+{% block content %}
+    <div class="fos_user_user_show">
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Empleado Registrado!</h4>
+            <a class="btn btn-dark mt-2" href="{{ path('employees') }}">Volver a lista de empleados</a>
+        </div>
+    </div>
+{% endblock %}

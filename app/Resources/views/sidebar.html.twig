@@ -12,7 +12,17 @@
         <nav id="sidebar">
             <div class="sidebar-header">
                 <h3 class="text-center">Bienvenido/a {{ app.user.username }}</h3>
+               <div class="d-flex justify-content-center mt-3">
+                   <div class="image-perfil">
+                        {% if app.user.image is not empty %}
+                            <img alt="imagen perfil" src="{{ asset('uploads/img/user/' ~ app.user.image) }}">
+                        {% else %}
+                            <img alt="imagen perfil" src="{{ asset('uploads/img/user/user.png') }}">
+                        {% endif %}
+                    </div>
+                </div>
                 <strong>Th</strong>
+
             </div>
 
             <ul class="list-unstyled components">

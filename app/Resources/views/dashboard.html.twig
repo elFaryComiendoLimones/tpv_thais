@@ -1,43 +1,62 @@
 {% extends 'sidebar.html.twig' %}
 
 {% block content %}
-   {# {{ dump(app.user) }} #}
-    <h2>Collapsible Sidebar Using Bootstrap 4</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-        deserunt mollit anim id est laborum.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-        deserunt mollit anim id est laborum.</p>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chartContainer">
 
-    <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-4">
+                <div class="card rounded">
+                    <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h4 class="card-title m-0 ml-2">Total de ventas</h4>
+                        <h5 class="m-0 ml-2">{{ totalSales }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card rounded">
+                    <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+                        <div class="card-icon bg-green">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h4 class="card-title m-0 ml-2">Total de Empleados</h4>
+                        <h5 class="m-0 ml-2">{{ totalEmployees }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card rounded">
+                    <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+                        <div class="card-icon bg-blue">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="card-title m-0 ml-2">Total de Clientes</h4>
+                        <h5 class="m-0 ml-2">{{ totalClients }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
 
-    <h2>Lorem Ipsum Dolor</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-        deserunt mollit anim id est laborum.</p>
-
-    <div class="line"></div>
-
-    <h2>Lorem Ipsum Dolor</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-        deserunt mollit anim id est laborum.</p>
-
-    <div class="line"></div>
-
-    <h3>Lorem Ipsum Dolor</h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-        deserunt mollit anim id est laborum.</p>
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/js/canvasjs.min.js') }}"></script>
+    <script type="text/javascript">
+        var path_data_chart = '{{ path('data_chart') }}';
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/js/dashboard.js') }}"></script>
 {% endblock %}

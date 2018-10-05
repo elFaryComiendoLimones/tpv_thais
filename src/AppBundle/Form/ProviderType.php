@@ -35,7 +35,7 @@ class ProviderType extends AbstractType
             ->add('town', null, array('required' => false, 'data_class' => null, 'label' => 'Localidad', 'attr' => array('class' => 'form-control', 'placeholder' => 'Localidad del proveedor')))
             ->add('postcode', NumberType::class, array('required' => false, 'data_class' => null, 'label' => 'Código Postal', 'attr' => array('class' => 'form-control', 'placeholder' => 'Código postal del proveedor')))
             ->add('address', null, array('required' => false, 'data_class' => null, 'label' => 'Dirección', 'attr' => array('class' => 'form-control', 'placeholder' => 'Dirección del proveedor')))
-            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-success btn-lg float-right')));
+            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-submit btn-lg float-right shadow-sm')));
     }
 
     public function configureOptions(OptionsResolver $resolver)

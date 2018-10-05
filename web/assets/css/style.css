@@ -115,9 +115,15 @@ span {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #7386D5;
+    background: linear-gradient(60deg,#ec407a,#d81b60);
     color: #fff;
     transition: all 0.3s;
+
+    background-image: url("../img/backgrounds/bg1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 #sidebar.active {
@@ -178,7 +184,9 @@ span {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    border-bottom: rgba(180,180,180,.3) 1px solid;
+    width: 90%;
+    margin: 0 auto;
 }
 
 #sidebar .sidebar-header strong {
@@ -188,18 +196,20 @@ span {
 
 #sidebar ul.components {
     padding: 20px 0;
-    border-bottom: 1px solid #47748b;
 }
 
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
     display: block;
+    width: 95%;
+    margin: 0 auto;
+    border-radius: 5%;
 }
 
 #sidebar ul li a:hover {
-    color: #7386D5;
-    background: #fff;
+    color: #fff;
+    background-color: rgba(200,200,200,.2);
 }
 
 #sidebar ul li a i {
@@ -209,7 +219,7 @@ span {
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
     color: #fff;
-    background: #6d7fcc;
+    background: #e91e63;
 }
 
 a[data-toggle="collapse"] {
@@ -227,7 +237,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    background: transparent;
 }
 
 ul.CTAs {
@@ -249,7 +259,7 @@ a.download {
 
 a.article,
 a.article:hover {
-    background: #6d7fcc !important;
+    background-color: rgba(200,200,200,.2) !important;
     color: #fff !important;
 }
 
@@ -471,10 +481,6 @@ button.action{
 }
 
 
-
-
-
-
 /*Mensaje de carga*/
 .spinner {
     width: 100%;
@@ -520,6 +526,10 @@ button.action{
           -webkit-transform: scale(1.0);
       }
 }
+
+
+
+
 
 
 /*----------------------Estilos del ticket---------------------*/
@@ -1047,3 +1057,58 @@ th.cantidad {
 #btn_associate_id_client{
     transition: all 1s ease;
 }
+
+
+/*----------------Estilos para las tablas y sus cabeceras--------------------------*/
+
+.card .card-header-rose .card-icon{
+    box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(233,30,99,.4);
+    background: linear-gradient(60deg,#ec407a,#d81b60);
+    width: 60px;
+    height: 60px;
+    padding: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    font-size: 25px;
+    border-radius: 5%;
+}
+
+.card table thead tr th{
+    border: none;
+}
+
+.card table .btn{
+    width: 45px;
+    text-align: center;
+}
+
+.bg-rose{
+    background: linear-gradient(60deg,#ec407a,#d81b60) !important;
+}
+
+.bg-blue{
+    background: linear-gradient(60deg,#26c6da,#00acc1) !important;
+}
+
+.bg-green{
+    background: linear-gradient(60deg,#66bb6a,#43a047) !important;
+}
+
+/*--------------------Estilos dashboard--------------------*/
+#chartContainer{
+    height: 400px;
+}
+
+
+.btn-submit{
+    background: linear-gradient(60deg,#26c6da,#00acc1);
+    color: #FFF;
+    border: none;
+}
+
+.btn-submit:hover{
+    background: linear-gradient(to right, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+}
+

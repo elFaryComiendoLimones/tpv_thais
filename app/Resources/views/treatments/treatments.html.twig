@@ -1,7 +1,7 @@
 {% extends 'sidebar.html.twig' %}
 
 {% block content %}
-<h1>Lista de Tratamientos</h1>
+    <h1>Lista de Tratamientos</h1>
 
     <a class="btn btn-dark mb-2" href="{{ path('create-treatment') }}">Añadir tratamiento</a>
 
@@ -14,52 +14,70 @@
         </div>
     {% endif %}
 
-    <table class="table">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Precio</th>
-            <th scope="col" colspan="2">Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for t in treatments %}
-            <tr>
-                <th scope="row">
-                    <div class="image-product">
-                        <img alt="Tratamiento" src="{{ asset('uploads/img/treatment/letter-t.svg') }}">
-                    </div>
-                </th>
-                <td>{{ t.name }}</td>
-                <td>{{ t.description }}</td>
-                <td>{{ t.price }}</td>
-                <td colspan="2">
-                    <a href="{{ path('edit-treatment', {'id' : t.id}) }}" class="btn btn-warning">Editar</a>
-                    <a href="{{ path('delete-treatment', {'id' : t.id}) }}" class="btn btn-danger message-confirm" data-confirm="¿Estás seguro de borrar el tratamiento?" data-confirmed="El tratamiento se ha borrado correctamente!">
-                        Eliminar
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="card rounded">
+        <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+            <div class="card-icon">
+                <i class="fas fa-list-ul"></i>
+            </div>
+            <h4 class="card-title m-0 ml-2">Lista de Tratamientos</h4>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col" colspan="2">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in treatments %}
+                    <tr>
+                        <th scope="row">
+                            <div class="image-product">
+                                <img alt="Tratamiento" src="{{ asset('uploads/img/treatment/letter-t.svg') }}">
+                            </div>
+                        </th>
+                        <td>{{ t.name }}</td>
+                        <td>{{ t.description }}</td>
+                        <td>{{ t.price }} €</td>
+                        <td colspan="2">
+                            <a href="{{ path('edit-treatment', {'id' : t.id}) }}" class="btn btn-warning"><i
+                                        class="fas fa-edit"></i></a>
+                            <a href="{{ path('delete-treatment', {'id' : t.id}) }}"
+                               class="btn btn-danger message-confirm"
+                               data-confirm="¿Estás seguro de borrar el tratamiento?"
+                               data-confirmed="El tratamiento se ha borrado correctamente!">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     {% if pagination.range|length > 1 %}
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item">
-                    <a class="page-link" href="{{ path('treatments', {'page' : pagination.previous}) }}" aria-label="Previous">
+                    <a class="page-link" href="{{ path('treatments', {'page' : pagination.previous}) }}"
+                       aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
                     </a>
                 </li>
                 {% for pag in pagination.range %}
                     {% if pagination.actual == pag %}
-                        <li class="page-item active"><a class="page-link" href="{{ path('treatments', {'page' : pag}) }}">{{ pag }}</a></li>
+                        <li class="page-item active"><a class="page-link"
+                                                        href="{{ path('treatments', {'page' : pag}) }}">{{ pag }}</a>
+                        </li>
                     {% else %}
-                        <li class="page-item"><a class="page-link" href="{{ path('treatments', {'page' : pag}) }}">{{ pag }}</a></li>
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ path('treatments', {'page' : pag}) }}">{{ pag }}</a></li>
                     {% endif %}
                 {% endfor %}
                 <li class="page-item">

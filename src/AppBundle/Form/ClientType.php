@@ -46,7 +46,7 @@ class ClientType extends AbstractType
             //->add('birthdate',DateType::class,array('widget' => 'single_text','format' => 'yyyy-MM-dd', 'input' => 'timestamp'))
             ->add('telephone', NumberType::class, array('label' => 'Teléfono', 'attr' => array('class' => 'form-control', 'placeholder' => 'Teléfono del cliente')))
             ->add('email', EmailType::class, array('required' => false, 'data_class' => null, 'label' => 'Email', 'attr' => array('class' => 'form-control', 'placeholder' => 'Email del cliente')))
-            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-success btn-lg float-right')));
+            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-submit btn-lg float-right shadow-sm')));
 
 
         /*$builder->get('birthdate')

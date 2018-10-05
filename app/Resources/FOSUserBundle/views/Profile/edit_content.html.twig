@@ -1,47 +1,34 @@
 {% extends 'sidebar.html.twig' %}
 {% block content %}
-    <h1>Editar Perfil</h1>
 
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6 mx-auto">
-                        <div class="card border-secondary">
-                            <div class="card-header">
-                                <h3 class="mb-0 my-2">Datos del perfil</h3>
-                            </div>
-                            <div class="card-body">
-                                {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
-                                <div class="form-group">
-                                    {{ form_label(form.current_password) }}
-                                    {{ form_widget(form.current_password) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.username) }}
-                                    {{ form_widget(form.username) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.email) }}
-                                    {{ form_widget(form.email) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.image) }}
-                                    {{ form_widget(form.image) }}
-                                </div>
-                                <button type="submit" class="btn btn-success btn-lg float-right">Editar</button>
-                                {{ form_end(form) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--/row-->
-
+    <div class="card rounded">
+        <div class="card-header card-header-rose card-header-icon d-flex align-items-center bg-white">
+            <div class="card-icon w-25">
+                <h4 class="card-title m-0 ml-2">Editar perfil</h4>
             </div>
-            <!--/col-->
         </div>
-        <!--/row-->
+        <div class="card-body">
+            {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+            <div class="form-group">
+                {{ form_label(form.current_password) }}
+                {{ form_widget(form.current_password) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.username) }}
+                {{ form_widget(form.username) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.image) }}
+                {{ form_widget(form.image) }}
+            </div>
+            <button type="submit" class="btn btn-submit btn-lg float-right shadow-sm">Actualizar</button>
+            {{ form_end(form) }}
+        </div>
     </div>
-    <!--/container-->
-    <a class="btn btn-dark" href="{{ path('homepage') }}">Volver</a>
+
+    <a class="btn btn-dark mt-2" href="{{ path('homepage') }}">Volver</a>
 {% endblock %}

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Client;
+use AppBundle\Entity\Ticket;
 use AppBundle\Entity\User;
 use FOS\UserBundle\Form\Type\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,7 +24,20 @@ class EmployeeController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('dashboard.html.twig');
+
+        $em = $this->getDoctrine();
+
+        $totalSales = count($em->getRepository(Ticket::class)->findAll());
+        $totalEmployess = count($em->getRepository(User::class)->findByEnabled(1));
+        $totalClients = count($em->getRepository(Client::class)->findByActive(1));
+
+        $params = [
+            'totalSales' => $totalSales,
+            'totalEmployees' => $totalEmployess,
+            'totalClients' => $totalClients
+        ];
+
+        return $this->render('dashboard.html.twig', $params);
     }
 
     /**
@@ -111,7 +126,7 @@ class EmployeeController extends Controller
 
             $confirmed = true;
 
-            $this->redirectToRoute('edit-product', ['id' => $user->getId()]);
+            $this->redirectToRoute('edit-user', ['id' => $user->getId()]);
 
         }
 

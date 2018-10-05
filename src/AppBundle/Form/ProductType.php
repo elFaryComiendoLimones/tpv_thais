@@ -42,7 +42,7 @@ class ProductType extends AbstractType
                 'attr' => array('class' => 'form-control')
             ))
             ->add('image', FileType::class, array('data_class' => null, 'label' => 'Imagen de perfil', 'translation_domain' => 'FOSUserBundle', 'attr' => array('class' => 'form-control'), 'required' => false))
-            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-success btn-lg float-right')));
+            ->add('save', SubmitType::class, array('label' => 'Guardar', 'attr' => array('class' => 'btn btn-submit btn-lg float-right shadow-sm')));
     }
 
     public function configureOptions(OptionsResolver $resolver)

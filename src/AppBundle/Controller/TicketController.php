@@ -59,7 +59,6 @@ class TicketController extends Controller
             $tickets = $repo->findBy($filters,['date_sale' => 'DESC'],$limit, $pagination->getOffset());
         }
 
-
         $params = [
             'tickets' => $tickets,
             'pagination' => [
@@ -155,6 +154,58 @@ class TicketController extends Controller
 
         $jsonResponse = new JsonResponse();
         return $jsonResponse::fromJsonString($response);
+    }
+
+    /**
+     * @Route("/data_chart", name="data_chart")
+     */
+    public function ticketsChart(){
+        $repo = $this->getDoctrine()->getRepository(Ticket::class);
+        $tickets = $repo->findBy([],['date_sale' => 'DESC'],10);
+
+        $days = $this->getLastNDays(10);
+
+        $data_chart = [];
+        $cont = 0;
+        foreach ($days as $day){
+            $data_chart[$cont]['date'] = $day;
+            $units = 0;
+            foreach ($tickets as $ticket){
+                if(date('Y-m-d', $ticket->getDateSale()->getTimestamp()) == $day){
+                    foreach ($ticket->getTicketDetails() as $ticketDetail){
+                        $units += $ticketDetail->getPrice();
+                    }
+                }
+            }
+            $data_chart[$cont]['units'] = $units;
+            $cont++;
+        }
+
+
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array(
+            'typeCode', 'type', 'range',
+            'useCaseCode', 'useCase', 'updatedAt', 'updatedBy'));
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getid();
+        });
+        $serializer = new Serializer(array($normalizer), array($encoder));
+
+        $response = $serializer->serialize($data_chart, 'json');
+
+        $jsonResponse = new JsonResponse();
+        return $jsonResponse::fromJsonString($response);
+    }
+
+
+    private function getLastNDays($days, $format = 'Y-m-d'){
+        $m = date("m"); $de= date("d"); $y= date("Y");
+        $dateArray = array();
+        for($i=0; $i<=$days-1; $i++){
+            $dateArray[] = date($format, mktime(0,0,0,$m,($de-$i),$y));
+        }
+        return array_reverse($dateArray);
     }
 
 }
