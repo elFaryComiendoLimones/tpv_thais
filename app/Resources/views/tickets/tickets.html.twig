@@ -15,8 +15,7 @@
         <form class="form-row" method="get" action="{{ path('tickets') }}">
             <div class="col-sm-4 pb-3">
                 <label for="employ">Empleado</label>
-                {#<input type="text" class="form-control" name="employee" placeholder="Empleado...">#}
-                <select class="form-control select" name="employee">
+                <select class="form-control chosen-select" name="employee">
                     <option value="">Selecciona un empleado</option>
                     {% for user in data_select_filters.users %}
                         {% if filters is not empty and filters.id_user == user.getId() %}
@@ -29,8 +28,7 @@
             </div>
             <div class="col-sm-4 pb-3">
                 <label for="client">Cliente</label>
-                {#<input type="text" class="form-control" name="client" placeholder="Cliente...">#}
-                <select class="form-control select" name="client">
+                <select class="form-control chosen-select" name="client">
                     <option value="">Selecciona un cliente</option>
                     {% for client in data_select_filters.clients %}
                         {% if filters is not empty and filters.id_client == client.getId() %}
