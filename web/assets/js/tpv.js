@@ -107,13 +107,22 @@ $(document).ready(function () {
         $('#btn_associate_id_client').children().last().remove();
     });
 
+    $('input[name="search-tpv"]').on('keydown', function(){
+        if($('input[name="type_ticket"]').val() == 'product'){
+            paginateProducts();
+        }else{
+            paginateTreatments();
+        }
+    });
+
 });
 
 function paginateProducts(template, page = null) {
     $.ajax({
         url: $('#pagination-products').data('path'),
         data: {
-            page: page
+            page: page,
+            name: $('input[name="search-tpv"]').val(),
         },
         type: 'POST',
         dataType: 'json',
@@ -144,7 +153,8 @@ function paginateTreatments(template, page = null) {
     $.ajax({
         url: $('#pagination-products').data('path_treatments'),
         data: {
-            page: page
+            page: page,
+            name: $('input[name="search-tpv"]').val(),
         },
         type: 'POST',
         dataType: 'json',
@@ -586,4 +596,49 @@ operate = function (a, b, operation) {
     if (operation === '-') return a - b;
     if (operation === '*') return a * b;
     if (operation === '/') return a / b;
+}
+
+
+function searchStock(){
+    var url = '';
+    if($('input[name="type_ticket"]').val() == 'product'){
+        url = $('input[name="get-data-products-filter"]').val();
+    }else{
+        url = $('input[name="get-data-treatments-filter"]').val();
+    }
+    var bt_template = $('li.mode-view').find('button.active');
+    var template = 'list';
+    if(bt_template.attr('id') == 'bt-list'){
+        template = 'list';
+    }else{
+        template = 'grid';
+    }
+    $.ajax({
+        url: url,
+        data: {
+            'name': $('input[name="search-tpv"]').val(),
+        },
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            if (typeof template !== 'undefinded' && template == 'grid') {
+                $('#grid-view').html(templateGrid(data.products));
+            } else {
+                $('#list-view').find('.list-group').html(templateList(data.products));
+            }
+            $('#pagination-products').html(paginationTemplate(data.pagination));
+            $('.bt-pag-tpv:not(.disabled)').on('click', function () {
+                paginateProducts(template, $(this).data('page'));
+            });
+            $('.product').off();
+            $('.product').on('click', tpv);
+        },
+        error: function (xhr, status) {
+            swal({
+                title: "Error",
+                text: status,
+                icon: "error",
+            });
+        }
+    });
 }

@@ -66,18 +66,32 @@ class TPVController extends Controller
 
         $em = $this->getDoctrine();
         /*Obtener el numero total de filas de la tabla*/
-        //$rows = count($em->getRepository(Product::class)->findByActive(1));
         $repo = $this->getDoctrine()->getRepository(Product::class);
         $rows = $repo->createQueryBuilder('p')
             ->select('count(p.id)')
+            ->where('p.active = :active')
+            ->setParameter(':active', 1)
             ->getQuery()
             ->getSingleScalarResult();
 
+        $name = !empty($request->get('name')) ? $request->get('name') : '';
         $page = !empty($request->get('page')) ? $request->get('page') : 1;
         $limit = 16;
         $pagination = new Pagination($rows, $page, $limit);
 
-        $products = $em->getRepository(Product::class)->findByActive(1, null, $limit, $pagination->getOffset());
+        if(empty($name)){
+            $products = $em->getRepository(Product::class)->findByActive(1, null, $limit, $pagination->getOffset());
+        }else{
+            $products = $em->getRepository(Product::class)->createQueryBuilder('p')
+                ->where('p.active = :active')
+                ->andWhere('p.name LIKE :name')
+                ->setParameter(':active', 1)
+                ->setParameter(':name', '%'. $name .'%')
+                ->setFirstResult($pagination->getOffset())
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+        }
 
         $data = [
             'products' => $products,
@@ -122,14 +136,29 @@ class TPVController extends Controller
         $repo = $this->getDoctrine()->getRepository(Treatment::class);
         $rows = $repo->createQueryBuilder('tr')
             ->select('count(tr.id)')
+            ->where('tr.active = :active')
+            ->setParameter(':active', 1)
             ->getQuery()
             ->getSingleScalarResult();
 
+        $name = !empty($request->get('name')) ? $request->get('name') : '';
         $page = !empty($request->get('page')) ? $request->get('page') : 1;
         $limit = 16;
         $pagination = new Pagination($rows, $page, $limit);
 
-        $treatments = $em->getRepository(Treatment::class)->findByActive(1, null, $limit, $pagination->getOffset());
+        if(empty($name)){
+            $treatments = $em->getRepository(Treatment::class)->findByActive(1, null, $limit, $pagination->getOffset());
+        }else{
+            $treatments = $em->getRepository(Treatment::class)->createQueryBuilder('t')
+                ->where('t.active = :active')
+                ->andWhere('t.name LIKE :name')
+                ->setParameter(':active', 1)
+                ->setParameter(':name', '%'. $name .'%')
+                ->setFirstResult($pagination->getOffset())
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+        }
 
         $data = [
             'treatments' => $treatments,
