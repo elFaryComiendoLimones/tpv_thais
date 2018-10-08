@@ -473,12 +473,9 @@ a.article:hover {
     text-overflow: ellipsis;
 }
 
-/*button.action{
-    padding: 0;
-    border: none;
-    background-color: transparent;
+.product{
     cursor: pointer;
-}*/
+}
 
 button.action{
     width: 25px !important;
