@@ -259,9 +259,9 @@ function tpv() {
             '<td class="td_price">' + price + '</td>' +
             '<td class="td_total_price">' + totalPrice + '</td>' +
             '<td>' +
-            '  <button class="sum action"><i class="fas fa-plus-square"></i></button>' +
-            '  <button class="minus action"><i class="fas fa-minus-square"></i></button>' +
-            '  <button class="rm action"><i class="fas fa-window-close"></i></button>' +
+            '  <button class="sum action btn btn-success"><i class="fas fa-plus-square"></i></button>' +
+            '  <button class="minus action btn btn-warning"><i class="fas fa-minus-square"></i></button>' +
+            '  <button class="rm action btn btn-danger"><i class="fas fa-window-close"></i></button>' +
             '</td>' +
             '</tr>');
         table.find('tbody').append(tr);
@@ -327,7 +327,7 @@ function minus() {
 function removeRow() {
     tr = $(this).closest('tr');
 
-    manageCart(tr.data('id_product'), null, 'del', $('input[name="type_ticket"]').val());
+    manageCart(tr.data('id_product'), null, 'del', $(this).closest('tr').data('type'));
 
     tr.remove();
 }
@@ -530,115 +530,5 @@ function printData(divToPrint) {
 
 
 function calculator() {
-    var result = 0;
-    var prevEntry = 0;
-    var operation = null;
-    var currentEntry = '0';
-    updateScreen(result);
-
-    $('.button_calculator').on('click', function (evt) {
-        var buttonPressed = $(this).html();
-        console.log(buttonPressed);
-
-        if (buttonPressed === "C") {
-            result = 0;
-            currentEntry = '0';
-        } else if (buttonPressed === "CE") {
-            currentEntry = '0';
-        } else if (buttonPressed === "back") {
-            //currentEntry = currentEntry.substring(0, currentEntry.length-1);
-        } else if (buttonPressed === "+/-") {
-            currentEntry *= -1;
-        } else if (buttonPressed === '.') {
-            currentEntry += '.';
-        } else if (isOperator(buttonPressed)) {
-            prevEntry = parseFloat(currentEntry);
-            operation = buttonPressed;
-            currentEntry = '';
-        } else if (isNumber(buttonPressed)) {
-            if (currentEntry === '0') currentEntry = buttonPressed;
-            else currentEntry = currentEntry + buttonPressed;
-        } else if (buttonPressed === '%') {
-            currentEntry = currentEntry / 100;
-        } else if (buttonPressed === 'sqrt') {
-            currentEntry = Math.sqrt(currentEntry);
-        } else if (buttonPressed === '1/x') {
-            currentEntry = 1 / currentEntry;
-        } else if (buttonPressed === 'pi') {
-            currentEntry = Math.PI;
-        } else if (buttonPressed === '=') {
-            currentEntry = operate(prevEntry, currentEntry, operation);
-            operation = null;
-        }
-
-        updateScreen(currentEntry);
-    });
-}
-
-updateScreen = function (displayValue) {
-    var displayValue = displayValue.toString();
-    $('.screen').html(displayValue.substring(0, 10));
-};
-
-isNumber = function (value) {
-    return !isNaN(value);
-}
-
-isOperator = function (value) {
-    return value === '/' || value === '*' || value === '+' || value === '-';
-};
-
-operate = function (a, b, operation) {
-    a = parseFloat(a);
-    b = parseFloat(b);
-    console.log(a, b, operation);
-    if (operation === '+') return a + b;
-    if (operation === '-') return a - b;
-    if (operation === '*') return a * b;
-    if (operation === '/') return a / b;
-}
-
-
-function searchStock(){
-    var url = '';
-    if($('input[name="type_ticket"]').val() == 'product'){
-        url = $('input[name="get-data-products-filter"]').val();
-    }else{
-        url = $('input[name="get-data-treatments-filter"]').val();
-    }
-    var bt_template = $('li.mode-view').find('button.active');
-    var template = 'list';
-    if(bt_template.attr('id') == 'bt-list'){
-        template = 'list';
-    }else{
-        template = 'grid';
-    }
-    $.ajax({
-        url: url,
-        data: {
-            'name': $('input[name="search-tpv"]').val(),
-        },
-        type: 'POST',
-        dataType: 'json',
-        success: function (data) {
-            if (typeof template !== 'undefinded' && template == 'grid') {
-                $('#grid-view').html(templateGrid(data.products));
-            } else {
-                $('#list-view').find('.list-group').html(templateList(data.products));
-            }
-            $('#pagination-products').html(paginationTemplate(data.pagination));
-            $('.bt-pag-tpv:not(.disabled)').on('click', function () {
-                paginateProducts(template, $(this).data('page'));
-            });
-            $('.product').off();
-            $('.product').on('click', tpv);
-        },
-        error: function (xhr, status) {
-            swal({
-                title: "Error",
-                text: status,
-                icon: "error",
-            });
-        }
-    });
+    $("#idCalculadora").Calculadora();
 }

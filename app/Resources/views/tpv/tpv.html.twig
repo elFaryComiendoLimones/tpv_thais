@@ -14,37 +14,47 @@
         <div class="row">
             <div class="col-6">
                 <div class="min-h-400">
-                    <table id="table_sale" class="table">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Producto</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">PVP/U</th>
-                            <th scope="col">Subtotal</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% if shoppingCart is not empty %}
-                            {% for key,type in shoppingCart %}
-                                {% for data in type %}
-                                    <tr data-type="{{ key }}" data-id_product="{{ data.item.id }}">
-                                        <td class="td_name" title="{{ data.item.name }}">
-                                            <span>{{ data.item.name }}</span></td>
-                                        <td class="td_cant">{{ data.cantidad }}</td>
-                                        <td class="td_price">{{ data.item.price|number_format(2, '.', ',') }}</td>
-                                        <td class="td_total_price">{{ (data.item.price * data.cantidad)|number_format(2, '.', ',') }}</td>
-                                        <td>
-                                            <button class="sum action"><i class="fas fa-plus-square"></i></button>
-                                            <button class="minus action"><i class="fas fa-minus-square"></i></button>
-                                            <button class="rm action"><i class="fas fa-window-close"></i></button>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% endfor %}
-                        {% endif %}
-                        </tbody>
-                    </table>
+                    <div class="card rounded card-table-sale">
+                        <div class="card-body">
+                            <table id="table_sale" class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">PVP/U</th>
+                                    <th scope="col">Subtotal</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if shoppingCart is not empty %}
+                                    {% for key,type in shoppingCart %}
+                                        {% for data in type %}
+                                            <tr data-type="{{ key }}" data-id_product="{{ data.item.id }}">
+                                                <td class="td_name" title="{{ data.item.name }}">
+                                                    <span>{{ data.item.name }}</span></td>
+                                                <td class="td_cant">{{ data.cantidad }}</td>
+                                                <td class="td_price">{{ data.item.price|number_format(2, '.', ',') }}</td>
+                                                <td class="td_total_price">{{ (data.item.price * data.cantidad)|number_format(2, '.', ',') }}</td>
+                                                <td class="d-flex flex-wrap">
+                                                    <button class="sum action btn btn-success">
+                                                        <i class="fas fa-plus-square"></i>
+                                                    </button>
+                                                    <button class="minus action btn btn-warning">
+                                                        <i class="fas fa-minus-square"></i>
+                                                    </button>
+                                                    <button class="rm action btn btn-danger">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <table id="table_total" class="table">
                     <tr class="bg-dark text-white">
@@ -55,36 +65,10 @@
                     </tr>
                 </table>
                 <button id="reset_ticket" type="button" class="btn btn-danger">Cancelar</button>
-                <button id="associate_to_client" type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal_associate_client">Asociar a cliente</button>
+                <button id="associate_to_client" type="button" class="btn btn-warning" data-toggle="modal"
+                        data-target="#modal_associate_client">Asociar a cliente
+                </button>
                 <button id="check_in" type="button" class="btn btn-success">Facturar</button>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="modal_associate_client" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Asociar Ticket a cliente</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <select id="select_id_client" name="select_id_client" class="chosen-select">
-                                    <option value="">Selecciona un cliente</option>
-                                    {% for client in client_list %}
-                                        <option value="{{ client.getId() }}">{{ client.__toString() }}</option>
-                                    {% endfor %}
-                                </select>
-                                <input type="hidden" id="id_client_associate" name="id_client_associate" value="">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary" id="btn_associate_id_client">Asociar</button>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="col-6">
                 <div class="row">
@@ -132,50 +116,37 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-6 offset-6 text-center">
-                <div class="calculator">
-                    <div class="calc-row">
-                        <div class="screen">0123456789</div>
-                    </div>
+            <div class="col-6 offset-6">
+                <div id="idCalculadora"> </div>
+            </div>
+        </div>
+    </div>
 
-                    <div class="calc-row">
-                        <div class="button button_calculator">C</div>
-                        <div class="button button_calculator">CE</div>
-                        <div class="button button_calculator backspace">back</div>
-                        <div class="button button_calculator plus-minus">+/-</div>
-                        <div class="button button_calculator">%</div>
-                    </div>
 
-                    <div class="calc-row">
-                        <div class="button button_calculator">7</div>
-                        <div class="button button_calculator">8</div>
-                        <div class="button button_calculator">9</div>
-                        <div class="button button_calculator divice">/</div>
-                        <div class="button button_calculator root">sqrt</div>
+    <!-- Modal -->
+    <div class="modal fade" id="modal_associate_client" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Asociar Ticket a cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select id="select_id_client" name="select_id_client" class="chosen-select">
+                            <option value="">Selecciona un cliente</option>
+                            {% for client in client_list %}
+                                <option value="{{ client.getId() }}">{{ client.__toString() }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" id="id_client_associate" name="id_client_associate" value="">
                     </div>
-
-                    <div class="calc-row">
-                        <div class="button button_calculator">4</div>
-                        <div class="button button_calculator">5</div>
-                        <div class="button button_calculator">6</div>
-                        <div class="button button_calculator multiply">*</div>
-                        <div class="button button_calculator inverse">1/x</div>
-                    </div>
-
-                    <div class="calc-row">
-                        <div class="button button_calculator">1</div>
-                        <div class="button button_calculator">2</div>
-                        <div class="button button_calculator">3</div>
-                        <div class="button button_calculator">-</div>
-                        <div class="button button_calculator pi">pi</div>
-                    </div>
-
-                    <div class="calc-row">
-                        <div class="button zero button_calculator">0</div>
-                        <div class="button button_calculator decimal">.</div>
-                        <div class="button button_calculator">+</div>
-                        <div class="button  button_calculator equal">=</div>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btn_associate_id_client">Asociar</button>
                 </div>
             </div>
         </div>
@@ -186,4 +157,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('assets/js/tpv.js') }}"></script>
+    <script src="{{ asset('assets/js/SimpleCalculadoraJquery.js') }}"></script>
 {% endblock %}
