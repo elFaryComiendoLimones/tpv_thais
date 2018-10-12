@@ -30,21 +30,21 @@
                                 {% if shoppingCart is not empty %}
                                     {% for key,type in shoppingCart %}
                                         {% for data in type %}
-                                            <tr data-type="{{ key }}" data-id_product="{{ data.item.id }}">
+                                            <tr data-type="{{ key }}" data-id_product="{{ data.item.id }}" data-barcode="{{ key == 'product' ? data.item.getBarCode() : '' }}">
                                                 <td class="td_name" title="{{ data.item.name }}">
                                                     <span>{{ data.item.name }}</span></td>
                                                 <td class="td_cant">{{ data.cantidad }}</td>
                                                 <td class="td_price">{{ data.item.price|number_format(2, '.', ',') }}</td>
                                                 <td class="td_total_price">{{ (data.item.price * data.cantidad)|number_format(2, '.', ',') }}</td>
                                                 <td class="d-flex flex-wrap">
-                                                    <button class="sum action btn btn-success">
+                                                    <button class="sum action">
                                                         <i class="fas fa-plus-square"></i>
                                                     </button>
-                                                    <button class="minus action btn btn-warning">
+                                                    <button class="minus action">
                                                         <i class="fas fa-minus-square"></i>
                                                     </button>
-                                                    <button class="rm action btn btn-danger">
-                                                        <i class="fas fa-times"></i>
+                                                    <button class="rm action">
+                                                        <i class="fas fa-window-close"></i>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -158,4 +158,5 @@
     {{ parent() }}
     <script src="{{ asset('assets/js/tpv.js') }}"></script>
     <script src="{{ asset('assets/js/SimpleCalculadoraJquery.js') }}"></script>
+    <script src="{{ asset('assets/js/anysearch.min.js') }}"></script>
 {% endblock %}

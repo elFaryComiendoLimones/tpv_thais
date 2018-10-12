@@ -115,6 +115,13 @@ $(document).ready(function () {
         }
     });
 
+
+    $(document).anysearch({
+        searchFunc: function(search) {
+            tpv(search);
+        }
+    });
+
 });
 
 function paginateProducts(template, page = null) {
@@ -184,7 +191,7 @@ function paginateTreatments(template, page = null) {
 function templateList(data) {
     var html = '';
     $.each(data, function (index, item) {
-        html += '<a href="#" class="list-group-item list-group-item-action product" data-id="' + item.id + '" data-price="' + item.price + '">' + item.name + '</a>';
+        html += '<a href="#" class="list-group-item list-group-item-action product" data-id="' + item.id + '" data-price="' + item.price + '" data-barcode="'+ item.barCode +'">' + item.name + '</a>';
     });
     return html;
 }
@@ -200,7 +207,7 @@ function templateGrid(data) {
             image = '<img title="' + item.name + '" alt="imagen producto" src="' + path_assets + '/img/product/letter-p.png">';
         }
 
-        html += '<div class="col-3 mt-2 cont-img product" data-id="' + item.id + '" data-price="' + item.price + '">' +
+        html += '<div class="col-3 mt-2 cont-img product" data-id="' + item.id + '" data-price="' + item.price + '" data-barcode="'+ item.barCode +'">' +
             image +
             '   <span class="d-block text-center">' + item.name + '</span>' +
             '   </div>';
@@ -226,13 +233,18 @@ function paginationTemplate(pagination) {
 }
 
 
-function tpv() {
+function tpv(bar_code) {
     var table = $('#table_sale');
-    var product = $(this);
+    if(typeof bar_code == 'undefined'){
+        var product = $(this);
+    }else{
+        var product = $('.product[data-barcode="'+ bar_code +'"]');
+    }
     var idProduct = product.data('id');
     var productName = product.text();
     var price = parseFloat(product.data('price')).toFixed(2);
     var type = $('input[name="type_ticket"]').val();
+    var barCode = product.data('barcode');
 
     //Comprobar si el producto ya se había insertado en la tabla
     var exists = false;
@@ -253,15 +265,15 @@ function tpv() {
         cant = 1;
         totalPrice = price;
 
-        tr = $('<tr data-type="' + type + '" data-id_product="' + idProduct + '">' +
+        tr = $('<tr data-type="' + type + '" data-id_product="' + idProduct + '" data-barcode="'+ barCode +'">' +
             '<td class="td_name" title="' + productName + '"><span>' + productName + '</span></td>' +
             '<td class="td_cant">' + cant + '</td>' +
             '<td class="td_price">' + price + '</td>' +
             '<td class="td_total_price">' + totalPrice + '</td>' +
-            '<td>' +
-            '  <button class="sum action btn btn-success"><i class="fas fa-plus-square"></i></button>' +
-            '  <button class="minus action btn btn-warning"><i class="fas fa-minus-square"></i></button>' +
-            '  <button class="rm action btn btn-danger"><i class="fas fa-window-close"></i></button>' +
+            '<td class="d-flex flex-wrap">' +
+            '  <button class="sum action"><i class="fas fa-plus-square"></i></button>' +
+            '  <button class="minus action"><i class="fas fa-minus-square"></i></button>' +
+            '  <button class="rm action"><i class="fas fa-window-close"></i></button>' +
             '</td>' +
             '</tr>');
         table.find('tbody').append(tr);
@@ -283,6 +295,14 @@ function tpv() {
         tr.find('.td_total_price').text(totalPrice);
     }
 
+    totalPriceArticles();
+
+    //añadir línea al carrito
+    manageCart(idProduct, cant, 'sum', type);
+}
+
+function totalPriceArticles(){
+    var table = $('#table_sale');
     //Calcular y pintar el precio total de todos los artículos
     var totalPriceArticles = 0;
     $.each(table.find('tbody').find('tr').find('.td_total_price'), function () {
@@ -290,11 +310,7 @@ function tpv() {
     });
     $('#table_total').find('.total_cant_articles').text(table.find('tbody').find('tr').length);
     $('#table_total').find('.total_price_articles').text(parseFloat(totalPriceArticles).toFixed(2) + ' €');
-
-    //añadir línea al carrito
-    manageCart(idProduct, cant, 'sum', type);
 }
-
 
 function sum() {
     tr = $(this).closest('tr');
@@ -304,6 +320,8 @@ function sum() {
     var totalPrice = parseFloat(cant * price).toFixed(2);
     tr.find('.td_cant').text(cant);
     tr.find('.td_total_price').text(totalPrice);
+
+    totalPriceArticles();
 
     //sumar al carrito
     manageCart(tr.data('id_product'), cant, 'sum', $('input[name="type_ticket"]').val());
@@ -319,6 +337,8 @@ function minus() {
         tr.find('.td_cant').text(cant);
         tr.find('.td_total_price').text(totalPrice);
 
+        totalPriceArticles();
+
         //restar cantidad al carrito
         manageCart(tr.data('id_product'), cant, 'minus', $('input[name="type_ticket"]').val());
     }
@@ -330,6 +350,7 @@ function removeRow() {
     manageCart(tr.data('id_product'), null, 'del', $(this).closest('tr').data('type'));
 
     tr.remove();
+    totalPriceArticles();
 }
 
 /*Funciones del carrito*/

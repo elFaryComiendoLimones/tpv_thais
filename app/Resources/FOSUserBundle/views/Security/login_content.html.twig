@@ -9,7 +9,10 @@
 {% endif %}
 <div class="wrapper-login">
     <form class="form-signin text-center" action="{{ path("fos_user_security_check") }}" method="post">
-        <img class="mb-4" src="{{ asset('assets/img/bootstrap-solid.svg') }}" alt="" width="72" height="72">
+        {#<img class="mb-4" src="{{ asset('assets/img/bootstrap-solid.svg') }}" alt="" width="72" height="72">#}
+        <div class="logo-login">
+            <span>TH</span>
+        </div>
         <h1 class="h3 mb-3 font-weight-normal">Inicia sesión</h1>
         {% if csrf_token %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
@@ -17,16 +20,16 @@
 
 
         <label for="username" class="sr-only">Nombre de usuario o email</label>
-        <input type="text" id="username" class="form-control" placeholder="Email address" name="_username"
+        <input type="text" id="username" class="form-control" placeholder="Usuario o correo electrónico" name="_username"
                value="{{ last_username }}" required="required" autocomplete="username" autofocus>
 
         <label for="password" class="sr-only">Contraseña</label>
-        <input type="password" id="password" class="form-control" placeholder="Password" name="_password"
+        <input type="password" id="password" class="form-control" placeholder="Contraseña" name="_password"
                required="required" autocomplete="current-password"/>
 
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on"/> Remember me
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on"/> Recordar sesión
             </label>
         </div>
 

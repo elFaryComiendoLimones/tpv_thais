@@ -18,6 +18,19 @@ body {
     height: 100%;
 }
 
+.logo-login{
+    background: linear-gradient(60deg,#ec407a,#d81b60);
+    color: #FFF;
+    border-radius: 6px;
+    width: 45%;
+    margin: 10px auto;
+}
+
+.logo-login span{
+    font-size: 55px;
+    font-weight: bold;
+}
+
 .form-signin {
     width: 100%;
     max-width: 330px;
@@ -478,12 +491,15 @@ a.article:hover {
 }
 
 button.action{
-    width: 25px !important;
-    height: 25px !important;
+    width: 20px !important;
+    height: 20px !important;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 2px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .card-table-sale{
